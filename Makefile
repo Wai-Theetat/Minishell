@@ -1,81 +1,70 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/25 15:17:31 by tdharmar          #+#    #+#              #
-#    Updated: 2026/04/25 16:07:04 by tdharmar         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME        = minishell
+SRC_DIR     = srcs
+OBJ_DIR     = obj
+INC_DIR     = includes
+LIBFT_DIR   = libft
+LIBFT       = $(LIBFT_DIR)/libft.a
 
-# Name
-NAME = minishell
+CC          = cc
+HOST        = $(shell hostname -s)
 
-# Directory
-SRC_DIR 	= srcs
-INC_DIR 	= includes
-OBJ_DIR 	= obj
+SRCS        = $(shell find $(SRC_DIR) -name '*.c')
+OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+DEPS        = $(OBJS:.o=.d)
+INC_DIRS    = $(shell find $(SRC_DIR) -type d)
 
-LIBFT_DIR	= libft
+CFLAGS      = -Wall -Wextra -Werror -g3
+CFLAGS      += -MMD -MP
+CFLAGS      += $(addprefix -I, $(INC_DIRS))
+CFLAGS      += -I $(INC_DIR) -I $(LIBFT_DIR)
+CFLAGS      += -D HOSTNAME=\"$(HOST)\"
 
-LIBFT = $(LIBFT_DIR)/libft.a
+LIB         = -L $(LIBFT_DIR) -lft -lreadline
 
-# Compiler & Flags
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
-INCLUDES	= -I $(INC_DIR) -I $(LIBFT_DIR)
-LIB			= -L $(LIBFT_DIR) -lft -lreadline -lhistory
-
-# Define Hostname  
-HOST		= $(shell hostname -s)
-INCLUDES	+= -D HOSTNAME=\"$(HOST)\"
-
-# Sources
-SRC_FILES = main.c \
-
-#NIXOS
 ifeq ($(HOST), nixos)
-	INCLUDES += $(shell pkg-config --cflags readline)
-	LIB      += $(shell pkg-config --libs readline)
+    CFLAGS  += $(shell pkg-config --cflags readline)
+    LIB     += $(shell pkg-config --libs readline)
 endif
 
-SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+# Colors
+GREEN       = \033[1;92m
+RED         = \033[1;91m
+RESET       = \033[0;39m
 
-# COLORS
-DEFAULT	= \033[0;39m
-RED		= \033[1;91m
-GREEN	= \033[1;92m
-
-# RULES
-all : $(NAME)
+all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-	$(MAKE) --silent -C $(LIBFT_DIR)
+	@make --silent -C $(LIBFT_DIR)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-$(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
-	@echo -e "$(GREEN)$(NAME) Compiled SUCCESS!!$(DEFAULT)"
+	@echo -e "$(GREEN)$(NAME) compiled successfully!$(RESET)"
 
-#compile
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/minishell.h | $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Debug with address sanitizer
+debug: CFLAGS += -fsanitize=address
+debug: re
+
+# Norminette
+norm:
+	@norminette $(shell find $(SRC_DIR) -name '*.[ch]')
+	@make --silent -C $(LIBFT_DIR) norm
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 	@make --silent -C $(LIBFT_DIR) clean
-	@echo -e "$(RED)Object files cleaned$(DEFAULT)"
+	@echo -e "$(RED)Objects cleaned$(RESET)"
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 	@make --silent -C $(LIBFT_DIR) fclean
-	@echo -e "$(RED)ALL CLEANED!!$(DEFAULT)"
+	@echo -e "$(RED)All cleaned$(RESET)"
 
 re: fclean all
 
-.PHONY: all clean fclean re 
+-include $(DEPS)
+
+.PHONY: all clean fclean re debug norm
