@@ -17,6 +17,8 @@ static int	ft_word_count(const char *str, char c)
 	int		count;
 	int		in_word;
 
+	if (!str)
+		return (0);
 	count = 0;
 	in_word = 0;
 	while (*str)
@@ -74,9 +76,11 @@ char	**ft_split(char const *s, char c)
 	char	**res;
 	int		i;
 
+	if (!s)
+		return (NULL);
 	i = 0;
 	res = (char **)malloc(sizeof(char *) * (ft_word_count(s, c) + 1));
-	if (!res || !s)
+	if (!res)
 		return (NULL);
 	while (*s)
 	{

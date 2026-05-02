@@ -6,12 +6,18 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 11:11:48 by tdharmar          #+#    #+#             */
-/*   Updated: 2025/11/20 02:05:06 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/02 11:55:31 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
+# define OPEN_FD_SIZE 1024
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -86,5 +92,17 @@ int		ft_print_hex(unsigned int nb, char format);
 void	*ft_gc_malloc(size_t size);
 void	*ft_gc_calloc(size_t count, size_t size);
 void	ft_gc_clear(void);
+
+//GNL
+char	*get_next_line(int fd);
+char	*ft_read_more(int fd);
+char	*ft_update_buf(int fd, char *txt);
+char	*ft_get_first_line(char *txt);
+char	*ft_trim_first_line(char *txt);
+//GNL-Utils
+char	*ft_append_str(char *fst, char *snd, size_t sndlen);
+char	**get_buffer_ref(int fd);
+void	gnl_cleanup(int fd);
+
 
 #endif

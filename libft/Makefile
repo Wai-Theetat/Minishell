@@ -20,8 +20,8 @@ SRCS			:=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c	ft_isascii.c	ft_isprint.c \
 					ft_printf.c			ft_print_char.c		ft_print_string.c \
 					ft_print_dec.c		ft_print_hex.c		ft_print_pointer.c \
 					ft_print_unsigned.c	 \
-					ft_gc.c
-
+					ft_gc.c \
+					get_next_line.c		get_next_line_utils.c
 
 OBJS			:=	${SRCS:.c=.o}
 
