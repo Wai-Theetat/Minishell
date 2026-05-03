@@ -1,35 +1,39 @@
-NAME        = minishell
-SRC_DIR     = srcs
-OBJ_DIR     = obj
-INC_DIR     = includes
-LIBFT_DIR   = libft
-LIBFT       = $(LIBFT_DIR)/libft.a
+NAME		= minishell
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -g3
+CFLAGS		+= -MMD -MP
 
-CC          = cc
-HOST        = $(shell hostname -s)
+INC_DIR		= includes
+LIBFT_DIR	= libft
+LIBFT		= $(LIBFT_DIR)/libft.a
 
-SRCS        = $(shell find $(SRC_DIR) -name '*.c')
-OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-DEPS        = $(OBJS:.o=.d)
-INC_DIRS    = $(shell find $(SRC_DIR) -type d)
+HOST		= $(shell hostname -s)
+CFLAGS		+= -I $(INC_DIR) -I $(LIBFT_DIR)
+CFLAGS		+= -I srcs/shell -I srcs/lexer -I srcs/parser
+CFLAGS		+= -I srcs/expand -I srcs/executor -I srcs/signals -I srcs/utils
+CFLAGS		+= -D HOSTNAME=\"$(HOST)\"
 
-CFLAGS      = -Wall -Wextra -Werror -g3
-CFLAGS      += -MMD -MP
-CFLAGS      += $(addprefix -I, $(INC_DIRS))
-CFLAGS      += -I $(INC_DIR) -I $(LIBFT_DIR)
-CFLAGS      += -D HOSTNAME=\"$(HOST)\"
-
-LIB         = -L $(LIBFT_DIR) -lft -lreadline
+LIB			= -L $(LIBFT_DIR) -lft -lreadline
 
 ifeq ($(HOST), nixos)
-    CFLAGS  += $(shell pkg-config --cflags readline)
-    LIB     += $(shell pkg-config --libs readline)
+	CFLAGS	+= $(shell pkg-config --cflags readline)
+	LIB	+= $(shell pkg-config --libs readline)
 endif
 
-# Colors
-GREEN       = \033[1;92m
-RED         = \033[1;91m
-RESET       = \033[0;39m
+SRC_DIR		= srcs
+OBJ_DIR		= obj
+
+SRCS		=	$(SRC_DIR)/main.c \
+				$(SRC_DIR)/lexer/token.c \
+				$(SRC_DIR)/lexer/lexer.c \
+
+
+OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+DEPS		= $(OBJS:.o=.d)
+
+GREEN		= \033[1;92m
+RED		= \033[1;91m
+RESET		= \033[0;39m
 
 all: $(LIBFT) $(NAME)
 
@@ -44,13 +48,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Debug with address sanitizer
-debug: CFLAGS += -fsanitize=address
-debug: re
-
-# Norminette
 norm:
-	@norminette $(shell find $(SRC_DIR) -name '*.[ch]')
+	@norminette $(INC_DIR) $(SRC_DIR)
 	@make --silent -C $(LIBFT_DIR) norm
 
 clean:
@@ -67,4 +66,4 @@ re: fclean all
 
 -include $(DEPS)
 
-.PHONY: all clean fclean re debug norm
+.PHONY: all clean fclean re norm
