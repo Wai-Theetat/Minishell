@@ -1,4 +1,4 @@
-1. Normal input/output
+## 1. Normal input/output
 	cat < infile.txt > outfile.txt
 	==================================
 	cmd->args     = ["cat", NULL]
@@ -7,7 +7,7 @@
 	cmd->append   = 0
 	cmd->heredoc  = NULL
 
-2. Append (>>)
+## 2. Append (>>)
 	echo hello >> log.txt
 	==================================
 	cmd->args     = ["echo", "hello", NULL]
@@ -15,7 +15,7 @@
 	cmd->outfile  = "log.txt"
 	cmd->append   = 1              // tells executor to open with O_APPEND
 	cmd->heredoc  = NULL
-3. Heredoc (<<)
+## 3. Heredoc (<<)
 	cat << EOF
 	==================================
 	hello
@@ -27,7 +27,7 @@
 	cmd->append   = 0
 	cmd->heredoc  = "EOF"         // readline until user types "EOF"
 
-4. Heredoc + append together
+## 4. Heredoc + append together
 	cat << END >> log.txt
 	line one
 	line two
@@ -39,7 +39,7 @@
 	cmd->append   = 1             // append to log.txt
 	cmd->heredoc  = "END"         // read stdin until "END"
 
-5. Full pipeline with mixed redirections
+## 5. Full pipeline with mixed redirections
 	grep foo < input.txt | sort >> result.txt
 	==================================
 	// cmd1
@@ -59,7 +59,7 @@
 	cmd2->next     = NULL
 
 
-RULE of EXECUTOR
+# ! RULE of EXECUTOR
 	- if heredoc is set → use it as stdin (ignore infile)
 	- if infile is set → open it and dup2 to stdin
 	- if outfile is set and append == 1 → open with O_WRONLY | O_CREAT | O_APPEND
