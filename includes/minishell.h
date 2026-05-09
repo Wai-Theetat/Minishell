@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/09 15:53:31 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/05/09 16:00:58 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ t_env	*ft_env_new(char *key, char *value);
 void	ft_env_add_back(t_env **env, t_env *new_env_node);
 t_env	*ft_env_from_line(char *line);
 t_env	*ft_env_init(char **envp);
-void ft_env_list(t_env **envp);
+void ft_env_list(t_env **envp); //just fortest
+char	**ft_env_to_char(t_env *env);
+char	*ft_env_get(t_env *env, char *key);
+void	ft_env_set(t_env **env, char *key, char *value);
+void	ft_env_unset(t_env **env, char *key);
+
 
 // ====Lexer===
 t_token	*ft_token_new(t_token_type type, char *value, char quote);
