@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/05 13:49:18 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 13:24:19 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # endif
 
 // ====Lexer===
-t_token	*ft_token_new(t_token_type type, char *value);
+t_token	*ft_token_new(t_token_type type, char *value, char quote);
 void	ft_token_add_back(t_token **lst, t_token *new);
 char	*ft_token_value_dup(const char *src);
 int		ft_token_list_size(t_token *lst);

@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:28:29 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/05 13:46:41 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 13:29:11 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	word_len(const char *input, int i)
 	return (len);
 }
 
-static void	fill_buf(const char *input, int *i, char *buf, int *j)
+static void	fill_buf(const char *input, int *i, char *buf, int *j, char *q)
 {
 	char	quote;
 
@@ -49,9 +49,18 @@ static void	fill_buf(const char *input, int *i, char *buf, int *j)
 	while (input[*i])
 	{
 		if (!quote && (input[*i] == '\'' || input[*i] == '"'))
+		{
+			if (*q == 0)
+				*q = input[*i];
+			else if (*q != input[*i])
+				*q = 0;
 			quote = input[(*i)++];
+		}
 		else if (quote && input[*i] == quote)
-			quote = 0 * (*i)++;
+		{
+			quote = 0;
+			(*i)++;
+		}
 		else if (ft_iswordend(input[*i], quote))
 			break ;
 		else
@@ -59,7 +68,7 @@ static void	fill_buf(const char *input, int *i, char *buf, int *j)
 	}
 }
 
-static char	*collect_word(const char *input, int *i)
+static char	*collect_word(const char *input, int *i, char *quote_out)
 {
 	char	*buf;
 	int		len;
@@ -72,7 +81,8 @@ static char	*collect_word(const char *input, int *i)
 	if (!buf)
 		return (NULL);
 	j = 0;
-	fill_buf(input, i, buf, &j);
+	*quote_out = 0;
+	fill_buf(input, i, buf, &j, quote_out);
 	buf[j] = '\0';
 	return (buf);
 }
@@ -80,9 +90,10 @@ static char	*collect_word(const char *input, int *i)
 t_token	*ft_lex_word(const char *input, int *i)
 {
 	char	*value;
+	char	quote;
 
-	value = collect_word(input, i);
+	value = collect_word(input, i, &quote);
 	if (!value)
 		return (NULL);
-	return (ft_token_new(TOKEN_WORD, value));
+	return (ft_token_new(TOKEN_WORD, value, quote));
 }
