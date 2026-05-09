@@ -6,30 +6,30 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/09 15:55:45 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/05/09 16:01:52 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-typedef struct s_env t_env;
+typedef struct s_env	t_env;
 typedef struct s_cmd
 {
 	char			**args;
 	char			*infile;
 	char			*outfile;
 	int				append;			// '>>' flag
-	char			*heredoc;		// << "*delimiter* to end str"
+	char			*heredoc;		// << "wait for *delimiter* to end multi line string"
 	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_shell
 {
-	t_cmd	*cmds;					// linked list of commands
-	t_env	*envp;					// linked list of environment path
-	int		exit_code;
-}	t_shell;
+	t_cmd *cmds; // linked list of commands
+	t_env *envp; // linked list of environment path
+	int					exit_code;
+}						t_shell;
 
 typedef enum e_token_type
 {
@@ -44,11 +44,11 @@ typedef enum e_token_type
 
 typedef struct s_token
 {
-	t_token_type	type;
-	char			*value;			// NULL=op,str=WORD
+	t_token_type		type;
+	char *value;	// NULL=op,str=WORD
 	char			quote;
-	struct s_token	*next;
-}	t_token;
+	struct s_token		*next;
+}						t_token;
 
 typedef struct s_buf
 {
@@ -58,10 +58,9 @@ typedef struct s_buf
 
 typedef struct s_env
 {
-	char *key;
-	char *value;
-	struct s_env  *next;
-} 	t_env;
-
+	char				*key;
+	char				*value;
+	struct s_env		*next;
+}						t_env;
 
 #endif
