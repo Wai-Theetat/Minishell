@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 13:38:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/05 13:48:57 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 13:30:30 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static t_token	*lex_double_operator(const char *input, int *i)
 	t_token	*token;
 
 	if (input[*i] == '<')
-		token = ft_token_new(TOKEN_HEREDOC, NULL);
+		token = ft_token_new(TOKEN_HEREDOC, NULL, 0);
 	else
-		token = ft_token_new(TOKEN_REDIRECT_APPEND, NULL);
+		token = ft_token_new(TOKEN_REDIRECT_APPEND, NULL, 0);
 	(*i) += 2;
 	return (token);
 }
@@ -32,11 +32,11 @@ static t_token	*lex_operator(const char *input, int *i)
 		|| (input[*i] == '>' && input[*i + 1] == '>'))
 		return (lex_double_operator(input, i));
 	if (input[*i] == '|')
-		token = ft_token_new(TOKEN_PIPE, NULL);
+		token = ft_token_new(TOKEN_PIPE, NULL, 0);
 	else if (input[*i] == '<')
-		token = ft_token_new(TOKEN_REDIRECT_IN, NULL);
+		token = ft_token_new(TOKEN_REDIRECT_IN, NULL, 0);
 	else
-		token = ft_token_new(TOKEN_REDIRECT_OUT, NULL);
+		token = ft_token_new(TOKEN_REDIRECT_OUT, NULL, 0);
 	(*i)++;
 	return (token);
 }
@@ -64,6 +64,6 @@ t_token	*ft_lexer(const char *input)
 			return (print_err_syntax());
 		ft_token_add_back(&tokens, token);
 	}
-	ft_token_add_back(&tokens, ft_token_new(TOKEN_EOF, NULL));
+	ft_token_add_back(&tokens, ft_token_new(TOKEN_EOF, NULL, 0));
 	return (tokens);
 }

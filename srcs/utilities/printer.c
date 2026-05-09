@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:17:18 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/05 13:49:43 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 13:35:23 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,17 @@ void	ft_print_tokens(t_token *tokens)
 
 	while (tokens)
 	{
-		ft_printf("[%s] ", type_names[tokens->type]);
+		ft_printf("[%s]\t", type_names[tokens->type]);
 		if (tokens->value)
-			ft_printf("value='%s'\n", tokens->value);
+			ft_printf("value='%s'\t", tokens->value);
 		else
-			ft_printf("(no value)\n");
+			ft_printf("(no value)\t");
+		if (tokens->quote == '\'')
+			ft_printf("quote=SINGLE\n");
+		else if (tokens->quote == '"')
+			ft_printf("quote=DOUBLE\n");
+		else
+			ft_printf("quote=NONE\n");
 		tokens = tokens->next;
 	}
 }
