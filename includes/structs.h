@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/09 13:20:56 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 13:55:12 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,11 @@ typedef struct s_token
 	char			quote;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_buf
+{
+	char	*data;
+	int		pos;
+}	t_buf;
 
 #endif
