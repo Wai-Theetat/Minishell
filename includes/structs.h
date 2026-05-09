@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/09 13:55:12 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 15:55:45 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+typedef struct s_env t_env;
 typedef struct s_cmd
 {
 	char			**args;
@@ -26,7 +27,7 @@ typedef struct s_cmd
 typedef struct s_shell
 {
 	t_cmd	*cmds;					// linked list of commands
-	char	**envp;
+	t_env	*envp;					// linked list of environment path
 	int		exit_code;
 }	t_shell;
 
@@ -54,5 +55,13 @@ typedef struct s_buf
 	char	*data;
 	int		pos;
 }	t_buf;
+
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct s_env  *next;
+} 	t_env;
+
 
 #endif
