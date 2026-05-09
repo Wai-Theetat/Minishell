@@ -28,13 +28,14 @@ SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/lexer/lexer.c \
 				$(SRC_DIR)/lexer/lexer_word.c  \
 				$(SRC_DIR)/utilities/checker.c \
-				$(SRC_DIR)/utilities/printer.c
+				$(SRC_DIR)/utilities/printer.c \
+				$(SRC_DIR)/parser/parser.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS		= $(OBJS:.o=.d)
 
 GREEN		= \033[1;92m
-RED		= \033[1;91m
+RED			= \033[1;91m
 RESET		= \033[0;39m
 
 all: $(LIBFT) $(NAME)
