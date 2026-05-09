@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/09 13:24:19 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/09 15:53:31 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # ifndef HOSTNAME
 #  define HOSTNAME "host"
 # endif
+
+// ====Env===
+t_env	*ft_env_new(char *key, char *value);
+void	ft_env_add_back(t_env **env, t_env *new_env_node);
+t_env	*ft_env_from_line(char *line);
+t_env	*ft_env_init(char **envp);
+void ft_env_list(t_env **envp);
 
 // ====Lexer===
 t_token	*ft_token_new(t_token_type type, char *value, char quote);
