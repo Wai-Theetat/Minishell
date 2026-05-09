@@ -6,16 +6,11 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 13:38:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/03 13:46:52 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:48:57 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	is_space(char c)
-{
-	return (c == ' ' || c == '\t');
-}
 
 static t_token	*lex_double_operator(const char *input, int *i)
 {
@@ -46,20 +41,6 @@ static t_token	*lex_operator(const char *input, int *i)
 	return (token);
 }
 
-static t_token	*lex_word(const char *input, int *i)
-{
-	int		start;
-	char	*value;
-
-	start = *i;
-	while (input[*i] && !is_space(input[*i])
-		&& input[*i] != '|' && input[*i] != '<' && input[*i] != '>')
-		(*i)++;
-	value = ft_token_value_dup(input + start);
-	value[*i - start] = '\0';
-	return (ft_token_new(TOKEN_WORD, value));
-}
-
 t_token	*ft_lexer(const char *input)
 {
 	t_token	*tokens;
@@ -70,15 +51,17 @@ t_token	*ft_lexer(const char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (is_space(input[i]))
+		if (ft_isspace(input[i]))
 		{
 			i++;
 			continue ;
 		}
-		if (input[i] == '|' || input[i] == '<' || input[i] == '>')
+		if (ft_isoper(input[i]))
 			token = lex_operator(input, &i);
 		else
-			token = lex_word(input, &i);
+			token = ft_lex_word(input, &i);
+		if (!token)
+			return (print_err_syntax());
 		ft_token_add_back(&tokens, token);
 	}
 	ft_token_add_back(&tokens, ft_token_new(TOKEN_EOF, NULL));

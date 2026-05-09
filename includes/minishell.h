@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/03 13:54:41 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:49:18 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../libft/libft.h"
 # include "structs.h"
-# include "constants.h"
 
 # include <unistd.h>
 # include <stdio.h>
@@ -33,8 +32,14 @@ t_token	*ft_token_new(t_token_type type, char *value);
 void	ft_token_add_back(t_token **lst, t_token *new);
 char	*ft_token_value_dup(const char *src);
 int		ft_token_list_size(t_token *lst);
-void	ft_print_tokens(t_token *tokens);
+t_token	*ft_lex_word(const char *input, int *i);
 t_token	*ft_lexer(const char *input);
 
+//Utils
+int		ft_isspace(char c);
+int		ft_isoper(char c);
+int		ft_iswordend(char c, char quote);
+void	ft_print_tokens(t_token *tokens);
+t_token	*print_err_syntax(void);
 
 #endif

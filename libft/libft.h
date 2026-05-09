@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 11:11:48 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/02 11:55:31 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:12:14 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,5 @@ char	*ft_trim_first_line(char *txt);
 char	*ft_append_str(char *fst, char *snd, size_t sndlen);
 char	**get_buffer_ref(int fd);
 void	gnl_cleanup(int fd);
-
 
 #endif

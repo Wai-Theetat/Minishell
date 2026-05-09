@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   constants.h                                        :+:      :+:    :+:   */
+/*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/03 12:49:55 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/03 12:50:45 by tdharmar         ###   ########.fr       */
+/*   Created: 2026/05/05 12:59:05 by tdharmar          #+#    #+#             */
+/*   Updated: 2026/05/05 13:33:06 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONSTANTS_H
-# define CONSTANTS_H
+#include "minishell.h"
 
-typedef enum e_token_type
+int	ft_isspace(char c)
 {
-	TOKEN_WORD,						//Regular txt/arg
-	TOKEN_PIPE,						// |
-	TOKEN_REDIRECT_IN,				// <
-	TOKEN_REDIRECT_OUT,				// >
-	TOKEN_REDIRECT_APPEND,			// >>
-	TOKEN_HEREDOC,					// <<
-	TOKEN_EOF						// End input
-}	t_token_type;
+	return (c == ' ' || (c >= 9 && c <= 13));
+}
 
-#endif
+int	ft_isoper(char c)
+{
+	return (c == '|' || c == '<' || c == '>');
+}
+
+int	ft_iswordend(char c, char quote)
+{
+	if (quote)
+		return (0);
+	return (c == ' ' || c == '\t'
+		|| c == '|' || c == '<' || c == '>');
+}

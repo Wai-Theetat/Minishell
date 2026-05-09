@@ -26,7 +26,9 @@ OBJ_DIR		= obj
 SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/lexer/token.c \
 				$(SRC_DIR)/lexer/lexer.c \
-
+				$(SRC_DIR)/lexer/lexer_word.c  \
+				$(SRC_DIR)/utilities/checker.c \
+				$(SRC_DIR)/utilities/printer.c
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS		= $(OBJS:.o=.d)
