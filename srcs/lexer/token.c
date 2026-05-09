@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 13:02:47 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/03 13:55:19 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:36:26 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,27 +67,4 @@ int	ft_token_list_size(t_token *lst)
 		lst = lst->next;
 	}
 	return (count);
-}
-
-void	ft_print_tokens(t_token *tokens)
-{
-	const char	*type_names[] = {
-		"WORD",
-		"PIPE",
-		"REDIRECT_IN",
-		"REDIRECT_OUT",
-		"REDIRECT_APPEND",
-		"HEREDOC",
-		"EOF"
-	};
-
-	while (tokens)
-	{
-		ft_printf("[%s] ", type_names[tokens->type]);
-		if (tokens->value)
-			ft_printf("value='%s'\n", tokens->value);
-		else
-			ft_printf("(no value)\n");
-		tokens = tokens->next;
-	}
 }

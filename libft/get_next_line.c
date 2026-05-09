@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 11:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/02 12:41:56 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:37:20 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_update_buf(int fd, char *txt)
 		return (NULL);
 	}
 	result = ft_append_str(txt, updated, ft_strlen(updated));
-	if(!result)
+	if (!result)
 	{
 		free(updated);
 		return (NULL);
@@ -97,8 +97,8 @@ char	*ft_trim_first_line(char *txt)
 {
 	char	*result;
 	size_t	i;
-	size_t remaining_len;
-	
+	size_t	remaining_len;
+
 	i = 0;
 	while (txt[i] && txt[i] != '\n')
 		i++;
