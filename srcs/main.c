@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
 /*   Updated: 2026/05/16 14:17:47 by tdharmar         ###   ########.fr       */
@@ -49,5 +49,6 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_code = 0;
 	shell.cmds = NULL;
 	run_shell(&shell);
+
 	return (0);
 }

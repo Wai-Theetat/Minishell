@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
 /*   Updated: 2026/05/16 13:43:02 by tdharmar         ###   ########.fr       */
@@ -47,8 +47,8 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;	// NULL=op,str=WORD
 	char			quote;
-	struct s_token	*next;
-}	t_token;
+	struct s_token		*next;
+}						t_token;
 
 typedef struct s_buf
 {
