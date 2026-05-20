@@ -28,22 +28,22 @@ static int	is_n_flag(char *arg)
 	return (1);
 }
 
-int	builtin_echo(char **argv)
+int	builtin_echo(t_cmd *cmd)
 {
 	size_t	i;
 	int		newline;
 
 	i = 1;
 	newline = 1;
-	while (argv[i] && is_n_flag(argv[i]))
+	while (cmd->args[i] && is_n_flag(cmd->args[i]))
 	{
 		newline = 0;
 		i++;
 	}
-	while (argv[i])
+	while (cmd->args[i])
 	{
-		ft_printf("%s", argv[i]);
-		if (argv[i + 1])
+		ft_printf("%s", cmd->args[i]);
+		if (cmd->args[i + 1])
 			ft_printf(" ");
 		i++;
 	}

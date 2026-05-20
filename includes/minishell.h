@@ -49,6 +49,13 @@ t_token	*ft_lexer(const char *input);
 // ====Parser===
 t_cmd	*ft_parser(t_token *tok);
 
+// ====Builtins===
+int		builtin_echo(t_cmd *cmd);
+int		builtin_env(t_env *env);
+int		buitin_exit(t_cmd *cmd, t_shell *shell);
+int		buitin_pwd(void);
+int		buitin_cd(t_cmd *cmd, t_shell *shell);
+
 //Utils
 int		ft_isspace(char c);
 int		ft_isoper(char c);
