@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/16 14:17:47 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/28 14:26:45 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static void	run_shell(t_shell *shell)
 		if (*input)
 			add_history(input);
 		tokens = ft_lexer(input);
-		if (tokens)
+		if (tokens && ft_syntax_check(tokens))
 		{
-			ft_print_tokens(tokens);
+			// ft_print_tokens(tokens);
 			shell->cmds = ft_parser(tokens);
 			ft_print_cmds(shell->cmds);
 		}
