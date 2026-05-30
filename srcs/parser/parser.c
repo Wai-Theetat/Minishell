@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/16 14:15:00 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/31 02:12:37 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,16 @@ static t_cmd	*parse_cmd(t_token **tok)
 		return (NULL);
 	argc = count_args(*tok);
 	cmd->args = ft_gc_calloc(argc + 1, sizeof(char *));
-	if (!cmd->args)
+	cmd->arg_quotes = ft_gc_calloc(argc + 1, sizeof(char));
+	if (!cmd->args || !cmd->arg_quotes)
 		return (NULL);
 	i = 0;
 	while (*tok && (*tok)->type != TOKEN_PIPE && (*tok)->type != TOKEN_EOF)
 	{
 		if ((*tok)->type == TOKEN_WORD)
 		{
-			cmd->args[i++] = (*tok)->value;
+			cmd->args[i] = (*tok)->value;
+			cmd->arg_quotes[i++] = (*tok)->quote;
 			*tok = (*tok)->next;
 		}
 		else

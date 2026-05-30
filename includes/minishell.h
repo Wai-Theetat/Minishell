@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/16 14:17:08 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/31 02:29:57 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ t_token	*ft_lexer(const char *input);
 
 // ====Parser===
 t_cmd	*ft_parser(t_token *tok);
+int		ft_syntax_check(t_token *tok);
+
+// ====Expand===
+void	ft_expand(t_cmd *cmds, t_env *env);
 
 // ====Builtins===
 int		builtin_echo(t_cmd *cmd);
@@ -63,5 +67,6 @@ int		ft_iswordend(char c, char quote);
 void	ft_print_tokens(t_token *tokens);
 void	ft_print_cmds(t_cmd *cmds);
 t_token	*print_err_syntax(void);
+char	*ft_gc_strjoin(const char *s1, const char *s2);
 
 #endif
