@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/28 14:26:45 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/05/31 02:31:15 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	run_shell(t_shell *shell)
 	char	*input;
 	t_token	*tokens;
 
-	(void)shell;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -29,10 +28,11 @@ static void	run_shell(t_shell *shell)
 		if (*input)
 			add_history(input);
 		tokens = ft_lexer(input);
+		free(input);
 		if (tokens && ft_syntax_check(tokens))
 		{
-			// ft_print_tokens(tokens);
 			shell->cmds = ft_parser(tokens);
+			ft_expand(shell->cmds, shell->envp);
 			ft_print_cmds(shell->cmds);
 		}
 		ft_gc_clear();
