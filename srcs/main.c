@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/31 02:36:38 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/01 13:18:52 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	run_shell(t_shell *shell)
 		if (tokens && ft_syntax_check(tokens))
 		{
 			shell->cmds = ft_parser(tokens);
-			ft_expand(shell->cmds, shell->envp);
+			ft_expand(shell->cmds, shell->envp, shell->exit_code);
 			ft_print_cmds(shell->cmds);
 		}
 		ft_gc_clear();
