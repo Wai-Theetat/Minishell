@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/31 02:12:37 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/02 09:18:03 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,14 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 		cmd->append = 1;
 	}
 	else if (type == TOKEN_HEREDOC)
-		cmd->heredoc = (*tok)->value;
+		cmd->heredoc_delim = (*tok)->value;
+	*tok = (*tok)->next;
+}
+
+static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
+{
+	cmd->args[*i] = (*tok)->value;
+	cmd->arg_quotes[(*i)++] = (*tok)->quote;
 	*tok = (*tok)->next;
 }
 
@@ -60,6 +67,7 @@ static t_cmd	*parse_cmd(t_token **tok)
 	cmd = ft_gc_calloc(1, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
+	cmd->heredoc_fd = -1;
 	argc = count_args(*tok);
 	cmd->args = ft_gc_calloc(argc + 1, sizeof(char *));
 	cmd->arg_quotes = ft_gc_calloc(argc + 1, sizeof(char));
@@ -69,14 +77,12 @@ static t_cmd	*parse_cmd(t_token **tok)
 	while (*tok && (*tok)->type != TOKEN_PIPE && (*tok)->type != TOKEN_EOF)
 	{
 		if ((*tok)->type == TOKEN_WORD)
-		{
-			cmd->args[i] = (*tok)->value;
-			cmd->arg_quotes[i++] = (*tok)->quote;
-			*tok = (*tok)->next;
-		}
+			parse_word(tok, cmd, &i);
 		else
 			parse_redir(tok, cmd);
 	}
+	if (cmd->heredoc_delim)
+		cmd->heredoc_fd = ft_heredoc(cmd->heredoc_delim);
 	return (cmd);
 }
 
