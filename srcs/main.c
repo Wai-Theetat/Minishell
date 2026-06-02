@@ -6,16 +6,30 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/01 13:18:52 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/02 08:58:35 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	process_input(t_shell *shell, char *full)
+{
+	t_token	*tokens;
+
+	tokens = ft_lexer(full);
+	if (tokens && ft_syntax_check(tokens))
+	{
+		shell->cmds = ft_parser(tokens);
+		ft_expand(shell->cmds, shell->envp, shell->exit_code);
+		ft_print_cmds(shell->cmds);
+	}
+	ft_gc_clear();
+}
+
 static void	run_shell(t_shell *shell)
 {
 	char	*input;
-	t_token	*tokens;
+	char	*full;
 
 	while (1)
 	{
@@ -27,15 +41,10 @@ static void	run_shell(t_shell *shell)
 		}
 		if (*input)
 			add_history(input);
-		tokens = ft_lexer(input);
-		free(input);
-		if (tokens && ft_syntax_check(tokens))
-		{
-			shell->cmds = ft_parser(tokens);
-			ft_expand(shell->cmds, shell->envp, shell->exit_code);
-			ft_print_cmds(shell->cmds);
-		}
-		ft_gc_clear();
+		full = read_full_input(input);
+		if (full != input)
+			free(input);
+		process_input(shell, full);
 	}
 }
 

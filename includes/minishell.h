@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/01 13:18:38 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/02 09:00:06 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ void	ft_print_cmds(t_cmd *cmds);
 t_token	*print_err_syntax(void);
 char	*ft_gc_strjoin(const char *s1, const char *s2);
 char	*ft_gc_itoa(int n);
+char	*read_full_input(char *first);
 
 #endif
