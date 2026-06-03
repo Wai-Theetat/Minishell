@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 13:21:59 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/05/20 10:41:17 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/03 17:55:43 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_cd_path(t_cmd *cmd, t_shell *shell)
 	return (path);
 }
 
-int	buitin_cd(t_cmd *cmd, t_shell *shell)
+int	builtin_cd(t_cmd *cmd, t_shell *shell)
 {
 	char	cwd[4096];
 	char	*path;

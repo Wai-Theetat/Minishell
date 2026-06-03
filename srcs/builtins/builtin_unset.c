@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_pwd.c                                      :+:      :+:    :+:   */
+/*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +#+#+#+#+#+  
+	+#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/19 13:21:59 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/03 17:55:47 by koonchevych      ###   ########.fr       */
+/*   Created: 2026/06/03 18:10:00 by copilot           #+#    #+#             */
+/*   Updated: 2026/06/03 18:10:00 by copilot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_pwd(void)
+int	builtin_unset(t_cmd *cmd, t_shell *shell)
 {
-	char	buffer_path[1024];
+	int	index;
 
-	if (!getcwd(buffer_path, 1024))
-	{
-		perror("pwd");
+	if (!cmd || !shell || !cmd->args)
 		return (1);
+	index = 1;
+	while (cmd->args[index])
+	{
+		ft_env_unset(&shell->envp, cmd->args[index]);
+		index++;
 	}
-	ft_printf("%s\n", buffer_path);
 	return (0);
 }
-

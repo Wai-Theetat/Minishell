@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/02 09:28:52 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/04 13:43:13 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ static void	process_input(t_shell *shell, char *full)
 	ft_gc_clear();
 }
 
+
+void run_cmd(t_shell *shell)
+{
+	if (shell->cmds && shell->cmds->args && shell->cmds->args[0])
+	{
+    if (is_builtin(shell->cmds->args[0]) && !shell->cmds->next)
+        shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
+	}
+}
+
 static void	run_shell(t_shell *shell)
 {
 	char	*input;
@@ -70,6 +80,7 @@ static void	run_shell(t_shell *shell)
 	}
 }
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
@@ -80,6 +91,5 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_code = 0;
 	shell.cmds = NULL;
 	run_shell(&shell);
-
 	return (0);
 }
