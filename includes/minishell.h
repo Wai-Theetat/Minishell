@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/31 02:29:57 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/03 10:10:14 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ int		ft_syntax_check(t_token *tok);
 
 // ====Expand===
 void	ft_expand(t_cmd *cmds, t_env *env);
+
+// ====Exec===
+char	*find_exec(char *cmd, t_env *envp);
 
 // ====Builtins===
 int		builtin_echo(t_cmd *cmd);
