@@ -24,15 +24,18 @@ SRC_DIR		= srcs
 OBJ_DIR		= obj
 
 SRCS			=	$(SRC_DIR)/main.c \
+				$(SRC_DIR)/signal/signal.c \
 				$(SRC_DIR)/lexer/token.c \
 				$(SRC_DIR)/lexer/lexer.c \
 				$(SRC_DIR)/lexer/lexer_word.c  \
 				$(SRC_DIR)/utilities/checker.c \
 				$(SRC_DIR)/utilities/printer.c \
 				$(SRC_DIR)/utilities/extra_helper.c \
+				$(SRC_DIR)/utilities/input.c \
 				$(SRC_DIR)/utilities/find_exec.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
+				$(SRC_DIR)/parser/heredoc.c \
 				$(SRC_DIR)/expand/expand.c \
 				$(SRC_DIR)/env/env_init.c \
 				$(SRC_DIR)/env/env_utils.c \

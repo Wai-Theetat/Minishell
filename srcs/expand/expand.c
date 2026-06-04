@@ -6,7 +6,18 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 01:10:51 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/31 02:30:34 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/01 13:18:10 by tdharmar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
+/*   Updated: 2026/05/16 14:00:00 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +33,18 @@ static int	var_len(const char *str)
 	return (len);
 }
 
-static char	*get_var(const char *str, int *i, t_env *env)
+static char	*get_var(const char *str, int *i, t_env *env, int exit_code)
 {
 	char	*key;
 	char	*val;
 	int		len;
 
 	(*i)++;
+	if (str[*i] == '?')
+	{
+		(*i)++;
+		return (ft_gc_itoa(exit_code));
+	}
 	len = var_len(str + *i);
 	if (len == 0)
 		return (ft_gc_strjoin("$", ""));
@@ -41,7 +57,7 @@ static char	*get_var(const char *str, int *i, t_env *env)
 	return (val);
 }
 
-static char	*expand_str(const char *str, t_env *env)
+static char	*expand_str(const char *str, t_env *env, int exit_code)
 {
 	char	*result;
 	char	*tmp;
@@ -54,9 +70,10 @@ static char	*expand_str(const char *str, t_env *env)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1]
-			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
+			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'
+				|| str[i + 1] == '?'))
 		{
-			tmp = get_var(str, &i, env);
+			tmp = get_var(str, &i, env, exit_code);
 			result = ft_gc_strjoin(result, tmp);
 		}
 		else
@@ -68,7 +85,7 @@ static char	*expand_str(const char *str, t_env *env)
 	return (result);
 }
 
-static void	expand_cmd(t_cmd *cmd, t_env *env)
+static void	expand_cmd(t_cmd *cmd, t_env *env, int exit_code)
 {
 	int	i;
 
@@ -76,20 +93,20 @@ static void	expand_cmd(t_cmd *cmd, t_env *env)
 	while (cmd->args && cmd->args[i])
 	{
 		if (cmd->arg_quotes[i] != '\'')
-			cmd->args[i] = expand_str(cmd->args[i], env);
+			cmd->args[i] = expand_str(cmd->args[i], env, exit_code);
 		i++;
 	}
 	if (cmd->infile)
-		cmd->infile = expand_str(cmd->infile, env);
+		cmd->infile = expand_str(cmd->infile, env, exit_code);
 	if (cmd->outfile)
-		cmd->outfile = expand_str(cmd->outfile, env);
+		cmd->outfile = expand_str(cmd->outfile, env, exit_code);
 }
 
-void	ft_expand(t_cmd *cmds, t_env *env)
+void	ft_expand(t_cmd *cmds, t_env *env, int exit_code)
 {
 	while (cmds)
 	{
-		expand_cmd(cmds, env);
+		expand_cmd(cmds, env, exit_code);
 		cmds = cmds->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:17:18 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/16 14:17:11 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/02 09:16:41 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_token	*print_err_syntax(void)
 	ft_printf("minishell: syntax error: unclosed quote\n");
 	return (NULL);
 }
-
 void	ft_print_cmds(t_cmd *cmds)
 {
 	int	i;
@@ -63,12 +62,14 @@ void	ft_print_cmds(t_cmd *cmds)
 			i++;
 		}
 		if (cmds->infile)
-			ft_printf("  infile  = '%s'\n", cmds->infile);
+			ft_printf("  infile        = '%s'\n", cmds->infile);
 		if (cmds->outfile)
-			ft_printf("  outfile = '%s' (append=%d)\n",
+			ft_printf("  outfile       = '%s' (append=%d)\n",
 				cmds->outfile, cmds->append);
-		if (cmds->heredoc)
-			ft_printf("  heredoc = '%s'\n", cmds->heredoc);
+		if (cmds->heredoc_delim)
+			ft_printf("  heredoc_delim = '%s'\n", cmds->heredoc_delim);
+		if (cmds->heredoc_fd != -1)
+			ft_printf("  heredoc_fd    = %d\n", cmds->heredoc_fd);
 		cmds = cmds->next;
 	}
 }

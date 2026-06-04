@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/31 02:11:31 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/02 09:12:54 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	int				append;			// '>>' flag
-	char			*heredoc;		// << "wait for *delimiter* to end"
+    char    *heredoc_delim;    // the << WORD
+    int     heredoc_fd;        // read end of pipe, -1 if none
 	struct s_cmd	*next;
 }	t_cmd;
 
