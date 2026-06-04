@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 14:26:15 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 14:27:52 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 	}
 	else if (type == TOKEN_HEREDOC)
 		cmd->heredoc_delim = (*tok)->value;
+	*tok = (*tok)->next;
+}
+
+static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
+{
+	cmd->args[*i] = (*tok)->value;
+	cmd->arg_quotes[(*i)++] = (*tok)->quote;
 	*tok = (*tok)->next;
 }
 
