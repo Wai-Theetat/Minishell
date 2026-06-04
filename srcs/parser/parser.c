@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 13:42:16 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 14:26:15 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,6 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 	*tok = (*tok)->next;
 }
 
-static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
-{
-	cmd->args[*i] = (*tok)->value;
-	cmd->arg_quotes[(*i)++] = (*tok)->quote;
-	*tok = (*tok)->next;
-}
-
 static t_cmd	*parse_cmd(t_token **tok)
 {
 	t_cmd	*cmd;
@@ -70,16 +63,14 @@ static t_cmd	*parse_cmd(t_token **tok)
 	cmd->heredoc_fd = -1;
 	argc = count_args(*tok);
 	cmd->args = ft_gc_calloc(argc + 1, sizeof(char *));
-	if (!cmd->args)
+	cmd->arg_quotes = ft_gc_calloc(argc + 1, sizeof(char));
+	if (!cmd->args || !cmd->arg_quotes)
 		return (NULL);
 	i = 0;
 	while (*tok && (*tok)->type != TOKEN_PIPE && (*tok)->type != TOKEN_EOF)
 	{
 		if ((*tok)->type == TOKEN_WORD)
-		{
-			cmd->args[i++] = (*tok)->value;
-			*tok = (*tok)->next;
-		}
+			parse_word(tok, cmd, &i);
 		else
 			parse_redir(tok, cmd);
 	}
