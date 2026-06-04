@@ -1,6 +1,6 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
+CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
 CFLAGS		+= -MMD -MP
 
 INC_DIR		= includes
@@ -53,7 +53,7 @@ $(LIBFT):
 	@make --silent -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -fsanitize=address -o $(NAME)
 	@echo -e "$(GREEN)$(NAME) compiled successfully!$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
