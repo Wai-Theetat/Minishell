@@ -6,11 +6,21 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 13:43:13 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 15:35:45 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void	run_cmd(t_shell *shell)
+{
+	if (!shell || !shell->cmds || !shell->cmds->args || !shell->cmds->args[0])
+		return ;
+	if (shell->cmds->next)
+		return ;
+	shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
+}
 
 static void	print_heredoc_content(t_cmd *cmds)
 {
@@ -42,19 +52,10 @@ static void	process_input(t_shell *shell, char *full)
 		shell->cmds = ft_parser(tokens);
 		ft_expand(shell->cmds, shell->envp, shell->exit_code);
 		ft_print_cmds(shell->cmds);
+		run_cmd(shell);
 		print_heredoc_content(shell->cmds);
 	}
 	ft_gc_clear();
-}
-
-
-void run_cmd(t_shell *shell)
-{
-	if (shell->cmds && shell->cmds->args && shell->cmds->args[0])
-	{
-    if (is_builtin(shell->cmds->args[0]) && !shell->cmds->next)
-        shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
-	}
 }
 
 static void	run_shell(t_shell *shell)
@@ -79,7 +80,6 @@ static void	run_shell(t_shell *shell)
 		process_input(shell, full);
 	}
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {

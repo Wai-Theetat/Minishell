@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 13:21:59 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/03 17:55:47 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 15:44:58 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,3 @@ int	builtin_pwd(void)
 	ft_printf("%s\n", buffer_path);
 	return (0);
 }
-

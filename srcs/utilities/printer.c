@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:17:18 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 13:42:22 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 15:47:14 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,8 @@
 
 void	ft_print_tokens(t_token *tokens)
 {
-	const char	*type_names[] = {
-		"WORD",
-		"PIPE",
-		"REDIRECT_IN",
-		"REDIRECT_OUT",
-		"REDIRECT_APPEND",
-		"HEREDOC",
-		"EOF"
-	};
+	const char	*type_names[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
+		"REDIRECT_APPEND", "HEREDOC", "EOF"};
 
 	while (tokens)
 	{
@@ -46,6 +39,7 @@ t_token	*print_err_syntax(void)
 	ft_printf("minishell: syntax error: unclosed quote\n");
 	return (NULL);
 }
+
 void	ft_print_cmds(t_cmd *cmds)
 {
 	int	i;
@@ -64,8 +58,8 @@ void	ft_print_cmds(t_cmd *cmds)
 		if (cmds->infile)
 			ft_printf("  infile        = '%s'\n", cmds->infile);
 		if (cmds->outfile)
-			ft_printf("  outfile       = '%s' (append=%d)\n",
-				cmds->outfile, cmds->append);
+			ft_printf("  outfile       = '%s' (append=%d)\n", cmds->outfile,
+				cmds->append);
 		if (cmds->heredoc_delim)
 			ft_printf("  heredoc_delim = '%s'\n", cmds->heredoc_delim);
 		if (cmds->heredoc_fd != -1)

@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 16:49:46 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/03 18:16:33 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/04 15:44:47 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	run_child(char *path, t_cmd *cmd, char **envp)
 	exit(126);
 }
 
-int	exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell)
+int	exec_external_cmd(t_cmd *cmd, t_env *envp, t_shell *shell)
 {
 	char	*path;
 	pid_t	pid;
@@ -54,12 +54,12 @@ int	exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell)
 
 	path = find_exec(cmd->args[0], envp);
 	if (!path)
-		return (127);
+		return (update_shell_exit_code(shell, 127));
 	pid = fork();
 	if (pid < 0)
 	{
 		free(path);
-		return (-1);
+		return (update_shell_exit_code(shell, -1));
 	}
 	if (pid == 0)
 	{
@@ -68,4 +68,13 @@ int	exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell)
 	}
 	free(path);
 	return (wait_for_child(pid, shell));
+}
+
+int	exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell)
+{
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (update_shell_exit_code(shell, 0));
+	if (is_builtin(cmd->args[0]))
+		return (run_builtin(cmd, shell));
+	return (exec_external_cmd(cmd, envp, shell));
 }
