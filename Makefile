@@ -28,15 +28,25 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/lexer/token.c \
 				$(SRC_DIR)/lexer/lexer.c \
 				$(SRC_DIR)/lexer/lexer_word.c  \
+				$(SRC_DIR)/utilities/builtin_utils.c \
 				$(SRC_DIR)/utilities/checker.c \
 				$(SRC_DIR)/utilities/printer.c \
+				$(SRC_DIR)/utilities/write_err_message.c \
 				$(SRC_DIR)/utilities/extra_helper.c \
 				$(SRC_DIR)/utilities/input.c \
-				$(SRC_DIR)/utilities/find_exec.c \
+				$(SRC_DIR)/executor/find_exec.c \
+				$(SRC_DIR)/executor/exec_simple.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \
 				$(SRC_DIR)/expand/expand.c \
+				$(SRC_DIR)/builtins/builtin_echo.c \
+				$(SRC_DIR)/builtins/builtin_env.c \
+				$(SRC_DIR)/builtins/builtin_exit.c \
+				$(SRC_DIR)/builtins/builtin_pwd.c \
+				$(SRC_DIR)/builtins/buitlin_cd.c \
+				$(SRC_DIR)/builtins/builtin_export.c \
+				$(SRC_DIR)/builtins/builtin_unset.c \
 				$(SRC_DIR)/env/env_init.c \
 				$(SRC_DIR)/env/env_utils.c \
 

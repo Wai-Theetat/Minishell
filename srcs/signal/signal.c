@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 09:14:05 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/02 09:14:06 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/04 15:47:29 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

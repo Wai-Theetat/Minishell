@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 13:21:59 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/05/20 10:22:39 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/03 17:58:04 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,32 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int	buitin_exit(t_cmd *cmd, t_shell *shell)
+long long	ft_atol(char *str)
+{
+	long long	number;
+	int			sign;
+	int			i;
+
+	number = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		number = number * 10 + (str[i] - '0');
+		i++;
+	}
+	return (number * sign);
+}
+
+int	builtin_exit(t_cmd *cmd, t_shell *shell)
 {
 	long long	n;
 
