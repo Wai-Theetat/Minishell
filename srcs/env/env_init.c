@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 21:19:15 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/05/09 13:43:51 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/03 09:08:46 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,15 @@ t_env	*ft_env_new(char *key, char *value)
 	env_node = malloc(sizeof(t_env));
 	if (!env_node)
 		return (NULL);
-	env_node->key = strdup(key);
-	env_node->value = strdup(value);
+	env_node->key = ft_strdup(key);
+	env_node->value = ft_strdup(value);
+	if (!env_node->key || !env_node->value)
+	{
+		free(env_node->key);
+		free(env_node->value);
+		free(env_node);
+		return (NULL);
+	}
 	env_node->next = NULL;
 	return (env_node);
 }

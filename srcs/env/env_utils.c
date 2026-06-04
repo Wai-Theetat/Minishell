@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 13:41:16 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/05/09 16:00:58 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/03 09:08:41 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,16 @@ void	ft_env_list(t_env **envp)
 {
 	if (!envp)
 		return ;
+	t_env	*current_node;
 
-	t_env *current_node;
 	current_node = *envp;
-	while (current_node->next != NULL)
+	while (current_node)
 	{
-		printf("%s:%s ->", current_node->key, current_node->value);
+		printf("%s:%s", current_node->key, current_node->value);
+		if (current_node->next)
+			printf(" -> ");
 		current_node = current_node->next;
 	}
+	printf("\n");
 	return ;
 }

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
 /*   Updated: 2026/06/02 09:13:28 by tdharmar         ###   ########.fr       */
@@ -58,6 +58,9 @@ int		ft_heredoc(const char *delim);
 
 // ====Expand===
 void	ft_expand(t_cmd *cmds, t_env *env, int exit_code);
+
+// ====Exec===
+char	*find_exec(char *cmd, t_env *envp);
 
 // ====Builtins===
 int		builtin_echo(t_cmd *cmd);

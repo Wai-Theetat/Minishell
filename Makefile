@@ -32,6 +32,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/utilities/printer.c \
 				$(SRC_DIR)/utilities/extra_helper.c \
 				$(SRC_DIR)/utilities/input.c \
+				$(SRC_DIR)/utilities/find_exec.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \
