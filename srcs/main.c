@@ -6,20 +6,20 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 15:35:45 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/15 17:11:17 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 void	run_cmd(t_shell *shell)
 {
 	if (!shell || !shell->cmds || !shell->cmds->args || !shell->cmds->args[0])
 		return ;
-	if (shell->cmds->next)
-		return ;
-	shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
+	if (!shell->cmds->next)
+		shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
+	else if (!shell->cmds->next->next)
+		shell->exit_code = exec_2_pipe(shell->cmds, shell->cmds->next, shell);
 }
 
 static void	print_heredoc_content(t_cmd *cmds)
