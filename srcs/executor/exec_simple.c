@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 16:49:46 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/04 15:44:47 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/15 17:18:31 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 
 static void	run_child(char *path, t_cmd *cmd, char **envp)
 {
+	if (apply_redirects(cmd) == -1)
+	{
+		free(path);
+		exit(1);
+	}
 	execve(path, cmd->args, envp);
 	perror(cmd->args[0]);
 	free(path);
