@@ -6,20 +6,18 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/19 15:51:16 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/19 23:55:23 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/20 00:43:36 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_n_pipe(t_shell *shell)
+size_t	spawn_pipeline(t_shell *shell, pid_t *pids)
 {
 	int		fd[2];
-	pid_t	pids[1024];
 	size_t	i;
 	t_cmd	*current_cmd;
 	int		prev_read;
-	int		status;
 
 	i = 0;
 	current_cmd = shell->cmds;
@@ -29,7 +27,7 @@ int	exec_n_pipe(t_shell *shell)
 		if (current_cmd->next)
 			pipe(fd);
 		pids[i] = fork();
-		if (pids[i] == 0)
+		if (pids[i++] == 0)
 			cmd_loop(prev_read, fd, current_cmd, shell);
 		if (prev_read != -1)
 			close(prev_read);
@@ -39,8 +37,17 @@ int	exec_n_pipe(t_shell *shell)
 			prev_read = fd[0];
 		}
 		current_cmd = current_cmd->next;
-		i++;
 	}
+	return (i);
+}
+
+int	exec_n_pipe(t_shell *shell)
+{
+	pid_t	pids[1024];
+	size_t	i;
+	int		status;
+
+	i = spawn_pipeline(shell, pids);
 	waitpid(pids[--i], &status, 0);
 	while (i-- > 0)
 		waitpid(pids[i], NULL, 0);
