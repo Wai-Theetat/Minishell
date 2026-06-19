@@ -19,10 +19,10 @@
 # include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <signal.h>
 # include <stdlib.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <sys/wait.h>
 
 # ifndef HOSTNAME
