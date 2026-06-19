@@ -38,6 +38,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/executor/exec_simple.c \
 				$(SRC_DIR)/executor/exec_second.c \
 				$(SRC_DIR)/executor/exec_utils.c \
+				$(SRC_DIR)/executor/exec_n.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \

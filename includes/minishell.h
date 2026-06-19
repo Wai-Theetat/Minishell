@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/16 20:21:01 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/20 13:28:58 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ int		exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell);
 void	exec_each_cmd(t_cmd *cmd, t_shell *shell);
 int		exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two, t_shell *shell);
 int		apply_redirects(t_cmd *cmd);
+int								exec_n_pipe(t_shell *shell);
+void							cmd_loop(int prev_read, int fd[2],
+									t_cmd *current_cmd, t_shell *shell);
+int						pipe_status_code(int status);
 
 // ====Builtins===
 int		builtin_echo(t_cmd *cmd);
