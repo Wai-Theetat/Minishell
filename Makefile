@@ -1,6 +1,6 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g3
 CFLAGS		+= -MMD -MP
 
 INC_DIR		= includes
@@ -18,6 +18,13 @@ LIB			= -L $(LIBFT_DIR) -lft -lreadline
 ifeq ($(HOST), nixos)
 	CFLAGS	+= $(shell pkg-config --cflags readline)
 	LIB	+= $(shell pkg-config --libs readline)
+endif
+
+UNAME		= $(shell uname -s)
+ifeq ($(UNAME), Darwin)
+	READLINE	= $(shell brew --prefix readline)
+	CFLAGS	+= -I $(READLINE)/include
+	LIB	+= -L $(READLINE)/lib
 endif
 
 SRC_DIR		= srcs
@@ -38,6 +45,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/executor/exec_simple.c \
 				$(SRC_DIR)/executor/exec_second.c \
 				$(SRC_DIR)/executor/exec_utils.c \
+				$(SRC_DIR)/executor/exec_n.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \
@@ -65,7 +73,7 @@ $(LIBFT):
 	@make --silent -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -fsanitize=address -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -o $(NAME)
 	@echo -e "$(GREEN)$(NAME) compiled successfully!$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

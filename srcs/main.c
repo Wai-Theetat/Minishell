@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/15 17:11:17 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/20 00:38:34 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ void	run_cmd(t_shell *shell)
 		shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
 	else if (!shell->cmds->next->next)
 		shell->exit_code = exec_2_pipe(shell->cmds, shell->cmds->next, shell);
+	else
+		shell->exit_code = exec_n_pipe(shell);
+
 }
 
 static void	print_heredoc_content(t_cmd *cmds)

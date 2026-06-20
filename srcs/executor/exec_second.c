@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 14:46:06 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/15 17:20:45 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/19 23:35:47 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 	exit(126);
 }
 
-static int	pipe_status_code(int status)
+int	pipe_status_code(int status)
 {
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -44,7 +44,7 @@ static int	pipe_status_code(int status)
 	return (-1);
 }
 
-static void	child_left(int fd[2], t_cmd *cmd, t_shell *shell)
+void	child_left(int fd[2], t_cmd *cmd, t_shell *shell)
 {
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
