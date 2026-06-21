@@ -1,7 +1,7 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
-# CFLAGS		=  -g3
+# CFLAGS		= -Wall -Wextra -Werror -g3
+CFLAGS		=  -g3
 CFLAGS		+= -MMD -MP
 
 INC_DIR		= includes

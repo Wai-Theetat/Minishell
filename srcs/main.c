@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/21 23:19:03 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/21 23:37:05 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ static void	process_input(t_shell *shell, char *full)
 	{
 		shell->cmds = ft_parser(tokens, shell->envp, shell->exit_code);
 		ft_expand(shell->cmds, shell->envp, shell->exit_code);
-		ft_print_cmds(shell->cmds);
-		run_cmd(shell);
+		if (g_signal != SIGINT)
+			run_cmd(shell);
 	}
 	ft_gc_clear();
 }
