@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 14:27:52 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/21 22:32:00 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 		cmd->append = 1;
 	}
 	else if (type == TOKEN_HEREDOC)
+	{
 		cmd->heredoc_delim = (*tok)->value;
+		cmd->heredoc_expand = ((*tok)->quote == 0);
+	}
 	*tok = (*tok)->next;
 }
 
@@ -58,7 +61,7 @@ static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
 	*tok = (*tok)->next;
 }
 
-static t_cmd	*parse_cmd(t_token **tok)
+static t_cmd	*parse_cmd(t_token **tok, t_env *env, int exit_code)
 {
 	t_cmd	*cmd;
 	int		argc;
@@ -82,11 +85,12 @@ static t_cmd	*parse_cmd(t_token **tok)
 			parse_redir(tok, cmd);
 	}
 	if (cmd->heredoc_delim)
-		cmd->heredoc_fd = ft_heredoc(cmd->heredoc_delim);
+		cmd->heredoc_fd = ft_heredoc(cmd->heredoc_delim,
+				cmd->heredoc_expand, env, exit_code);
 	return (cmd);
 }
 
-t_cmd	*ft_parser(t_token *tok)
+t_cmd	*ft_parser(t_token *tok, t_env *env, int exit_code)
 {
 	t_cmd	*head;
 	t_cmd	*last;
@@ -96,7 +100,7 @@ t_cmd	*ft_parser(t_token *tok)
 	last = NULL;
 	while (tok && tok->type != TOKEN_EOF)
 	{
-		cmd = parse_cmd(&tok);
+		cmd = parse_cmd(&tok, env, exit_code);
 		if (!cmd)
 			return (NULL);
 		if (!head)

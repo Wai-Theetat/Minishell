@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/15 17:25:57 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/21 22:29:02 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_cmd
 	char				*outfile;
 	int append;          // '>>' flag
 	char *heredoc_delim; // the << WORD
+	int					heredoc_expand;
 	int heredoc_fd;      // read end of pipe, -1 if none
 	struct s_cmd		*next;
 }						t_cmd;
@@ -64,5 +65,13 @@ typedef struct s_env
 	char				*value;
 	struct s_env		*next;
 }						t_env;
+
+typedef struct s_hdoc
+{
+	const char	*delim;
+	int			expand;
+	t_env		*env;
+	int			exit_code;
+}	t_hdoc;
 
 #endif

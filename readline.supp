@@ -1,0 +1,12 @@
+{
+   readline_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libreadline*
+}
+{
+   ncurses_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libncursesw*
+}

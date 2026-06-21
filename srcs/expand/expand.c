@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 01:10:51 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 13:42:00 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/21 22:28:06 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*get_var(const char *str, int *i, t_env *env, int exit_code)
 	return (val);
 }
 
-static char	*expand_str(const char *str, t_env *env, int exit_code)
+char	*expand_str(const char *str, t_env *env, int exit_code)
 {
 	char	*result;
 	char	*tmp;
