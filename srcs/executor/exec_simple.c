@@ -80,6 +80,6 @@ int	exec_simple(t_cmd *cmd, t_env *envp, t_shell *shell)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (update_shell_exit_code(shell, 0));
 	if (is_builtin(cmd->args[0]))
-		return (run_builtin(cmd, shell));
+		return (run_builtin_redir(cmd, shell));
 	return (exec_external_cmd(cmd, envp, shell));
 }
