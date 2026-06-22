@@ -65,3 +65,9 @@
 	- if outfile is set and append == 1 → open with O_WRONLY | O_CREAT | O_APPEND
 	- if outfile is set and append == 0 → open with O_WRONLY | O_CREAT | O_TRUNC
 	pipe between cmd->next nodes is always handled separately by your pipe loop
+
+
+# Redirector Executor
+cmd->infile 		if not NULL, open and dup2 to stdin
+cmd->outfile		if not NULL, open (truncate or append based on cmd->append) and dup2 to stdout
+cmd->heredoc_fd 	if not -1, dup2 directly to stdin (it's already a ready-to-read pipe fd), then close it after dup2

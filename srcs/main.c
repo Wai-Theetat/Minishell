@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/20 00:38:34 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/21 23:37:05 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,6 @@ void	run_cmd(t_shell *shell)
 		shell->exit_code = exec_2_pipe(shell->cmds, shell->cmds->next, shell);
 	else
 		shell->exit_code = exec_n_pipe(shell);
-
-}
-
-static void	print_heredoc_content(t_cmd *cmds)
-{
-	char	buf[1024];
-	int		n;
-
-	while (cmds)
-	{
-		if (cmds->heredoc_fd != -1)
-		{
-			ft_printf("  heredoc content:\n");
-			n = read(cmds->heredoc_fd, buf, 1023);
-			buf[n] = '\0';
-			ft_printf("%s\n", buf);
-			close(cmds->heredoc_fd);
-			cmds->heredoc_fd = -1;
-		}
-		cmds = cmds->next;
-	}
 }
 
 static void	process_input(t_shell *shell, char *full)
@@ -52,11 +31,10 @@ static void	process_input(t_shell *shell, char *full)
 	tokens = ft_lexer(full);
 	if (tokens && ft_syntax_check(tokens))
 	{
-		shell->cmds = ft_parser(tokens);
+		shell->cmds = ft_parser(tokens, shell->envp, shell->exit_code);
 		ft_expand(shell->cmds, shell->envp, shell->exit_code);
-		ft_print_cmds(shell->cmds);
-		run_cmd(shell);
-		print_heredoc_content(shell->cmds);
+		if (g_signal != SIGINT)
+			run_cmd(shell);
 	}
 	ft_gc_clear();
 }

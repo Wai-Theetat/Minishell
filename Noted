@@ -1,0 +1,25 @@
+$(SRC_DIR)/main.c \
+$(SRC_DIR)/shell/prompt.c \
+$(SRC_DIR)/shell/shell.c \
+$(SRC_DIR)/lexer/lexer.c \
+$(SRC_DIR)/lexer/lexer_utils.c \
+$(SRC_DIR)/lexer/token.c \
+$(SRC_DIR)/lexer/quote.c \
+$(SRC_DIR)/parser/parser.c \
+$(SRC_DIR)/parser/parser_redir.c \
+$(SRC_DIR)/parser/parser_syntax.c \
+$(SRC_DIR)/parser/parser_utils.c \
+$(SRC_DIR)/expand/expand.c \
+$(SRC_DIR)/expand/expand_var.c \
+$(SRC_DIR)/expand/expand_exit.c \
+$(SRC_DIR)/expand/expand_heredoc.c \
+$(SRC_DIR)/expand/expand_utils.c \
+$(SRC_DIR)/executor/executor.c \
+$(SRC_DIR)/executor/executor_redir.c \
+$(SRC_DIR)/executor/executor_heredoc.c \
+$(SRC_DIR)/executor/builtins.c \
+$(SRC_DIR)/executor/executor_utils.c \
+$(SRC_DIR)/signals/signals.c \
+$(SRC_DIR)/utils/error.c \
+$(SRC_DIR)/utils/env.c \
+$(SRC_DIR)/utils/cleanup.c
