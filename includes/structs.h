@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/26 19:47:11 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/21 22:29:02 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/06/22 09:54:33 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
