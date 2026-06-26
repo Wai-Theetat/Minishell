@@ -22,6 +22,7 @@
 # include <stdlib.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <unistd.h>
 
@@ -65,6 +66,7 @@ char	*expand_str(const char *str, t_env *env, int exit_code);
 
 // ====Exec===
 char							*find_exec(char *cmd, t_env *envp);
+int								exec_not_found_code(char *cmd);
 int								exec_simple(t_cmd *cmd, t_env *envp,
 									t_shell *shell);
 void							exec_each_cmd(t_cmd *cmd, t_shell *shell);

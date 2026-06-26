@@ -47,6 +47,8 @@ static void	run_child(char *path, t_cmd *cmd, char **envp)
 	}
 	execve(path, cmd->args, envp);
 	perror(cmd->args[0]);
+	if (errno == ENOENT)
+		return (free(path), exit(127));
 	free(path);
 	exit(126);
 }
@@ -59,7 +61,8 @@ int	exec_external_cmd(t_cmd *cmd, t_env *envp, t_shell *shell)
 
 	path = find_exec(cmd->args[0], envp);
 	if (!path)
-		return (update_shell_exit_code(shell, 127));
+		return (update_shell_exit_code(shell,
+				exec_not_found_code(cmd->args[0])));
 	pid = fork();
 	if (pid < 0)
 	{

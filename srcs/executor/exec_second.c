@@ -25,14 +25,12 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 		exit(run_builtin(cmd, shell));
 	path = find_exec(cmd->args[0], shell->envp);
 	if (!path)
-	{
-		write_msh_exec_error(cmd->args[0], "command not found");
-		exit(127);
-	}
+		exit(exec_not_found_code(cmd->args[0]));
 	env = ft_env_to_char(shell->envp);
 	execve(path, cmd->args, env);
-	perror(cmd->args[0]);
-	exit(126);
+	if (errno == ENOENT)
+		exit((perror(cmd->args[0]), 127));
+	exit((perror(cmd->args[0]), 126));
 }
 
 int	pipe_status_code(int status)

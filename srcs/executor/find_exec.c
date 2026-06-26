@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 16:47:46 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/03 17:38:52 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/06/26 21:52:03 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,22 @@ static char	*find_exec_in_paths(char **paths, char *cmd)
 	}
 	free_split(paths);
 	return (NULL);
+}
+
+int	exec_not_found_code(char *cmd)
+{
+	struct stat	st;
+
+	if (ft_strchr(cmd, '/'))
+	{
+		if (stat(cmd, &st) != 0)
+			return (write_msh_exec_error(cmd, "No such file or directory"),
+				127);
+		if (S_ISDIR(st.st_mode))
+			return (write_msh_exec_error(cmd, "Is a directory"), 126);
+		return (write_msh_exec_error(cmd, "Permission denied"), 126);
+	}
+	return (write_msh_exec_error(cmd, "command not found"), 127);
 }
 
 char	*find_exec(char *cmd, t_env *envp)
