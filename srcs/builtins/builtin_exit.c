@@ -62,21 +62,24 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 {
 	long long	n;
 
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	if (!cmd->args[1])
+	{
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		exit(shell->exit_code);
+	}
 	if (!is_numeric(cmd->args[1]))
 	{
-		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
+		write_msh_exec_arg_error("exit", cmd->args[1],
+			"numeric argument required");
 		exit(2);
 	}
 	if (cmd->args[2])
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		return (1);
+		write_msh_exec_error("exit", "too many arguments");
+		return (2);
 	}
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	n = ft_atol(cmd->args[1]);
 	exit((unsigned char)n);
 }
