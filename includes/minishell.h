@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/22 09:56:00 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/07/18 15:21:13 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+/* readline.h uses FILE, so it must come after <stdio.h> */
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <sys/stat.h>
@@ -32,6 +33,12 @@
 
 // ====Signals===
 extern volatile sig_atomic_t	g_signal;
+void							set_signal(int signum, void (*handler)(int));
+void							prompt_sigint(int sig);
+void							set_prompt_signals(void);
+void							set_exec_signals(void);
+void							set_child_signals(void);
+void							print_signal_msg(int status);
 
 // ====Env===
 t_env							*ft_env_new(char *key, char *value);
@@ -39,7 +46,7 @@ void							ft_env_add_back(t_env **env,
 									t_env *new_env_node);
 t_env							*ft_env_from_line(char *line);
 t_env							*ft_env_init(char **envp);
-void	ft_env_list(t_env **envp); // just fortest
+void							ft_env_list(t_env **envp);
 char							**ft_env_to_char(t_env *env);
 char							*ft_env_get(t_env *env, char *key);
 void							ft_env_set(t_env **env, char *key, char *value);
@@ -55,14 +62,18 @@ t_token							*ft_lex_word(const char *input, int *i);
 t_token							*ft_lexer(const char *input);
 
 // ====Parser===
-t_cmd							*ft_parser(t_token *tok, t_env *env, int exit_code);
+t_cmd							*ft_parser(t_token *tok, t_env *env,
+									int exit_code);
 int								ft_syntax_check(t_token *tok);
-int								ft_heredoc(const char *delim, int expand, t_env *env, int exit_code);
+int								ft_heredoc(const char *delim, int expand,
+									t_env *env, int exit_code);
+void							heredoc_child(int *pipefd, t_hdoc *h);
 
 // ====Expand===
 void							ft_expand(t_cmd *cmds, t_env *env,
 									int exit_code);
-char	*expand_str(const char *str, t_env *env, int exit_code);
+char							*expand_str(const char *str, t_env *env,
+									int exit_code);
 
 // ====Exec===
 char							*find_exec(char *cmd, t_env *envp);
@@ -73,9 +84,10 @@ void							exec_each_cmd(t_cmd *cmd, t_shell *shell);
 int								exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two,
 									t_shell *shell);
 int								apply_redirects(t_cmd *cmd);
-int		exec_n_pipe(t_shell *shell);
-void	cmd_loop(int prev_read, int fd[2], t_cmd *current_cmd, t_shell *shell);
-int				pipe_status_code(int status);
+int								exec_n_pipe(t_shell *shell);
+void							cmd_loop(int prev_read, int fd[2],
+									t_cmd *current_cmd, t_shell *shell);
+int								pipe_status_code(int status);
 
 // ====Builtins===
 int								builtin_echo(t_cmd *cmd);
@@ -100,8 +112,9 @@ void							write_msh_exec_error(char *exec_name,
 									char *err_message);
 void							write_msh_exec_arg_error(char *exec_name,
 									char *arg, char *err_message);
-void							write_msh_exec_arg_error_nocolon(char *exec_name,
-									char *arg, char *err_message);
+void							write_msh_exec_arg_error_nocolon(
+									char *exec_name, char *arg,
+									char *err_message);
 void							ft_print_tokens(t_token *tokens);
 void							ft_print_cmds(t_cmd *cmds);
 t_token							*print_err_syntax(void);

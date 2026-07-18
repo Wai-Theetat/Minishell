@@ -64,10 +64,15 @@ static void	run_shell(t_shell *shell)
 	char	*input;
 	char	*full;
 
+	set_prompt_signals();
 	while (1)
 	{
-		g_signal = 0;
 		input = readline("minishell$ ");
+		if (g_signal == SIGINT)
+		{
+			shell->exit_code = 130;
+			g_signal = 0;
+		}
 		if (!input)
 		{
 			ft_printf("exit\n");

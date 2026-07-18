@@ -47,10 +47,13 @@ int	exec_n_pipe(t_shell *shell)
 	size_t	i;
 	int		status;
 
+	set_exec_signals();
 	i = spawn_pipeline(shell, pids);
 	waitpid(pids[--i], &status, 0);
 	while (i-- > 0)
 		waitpid(pids[i], NULL, 0);
+	set_prompt_signals();
+	print_signal_msg(status);
 	shell->exit_code = pipe_status_code(status);
 	return (shell->exit_code);
 }

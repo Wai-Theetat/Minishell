@@ -33,6 +33,7 @@ OBJ_DIR		= obj
 
 SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/signal/signal.c \
+				$(SRC_DIR)/signal/signal_exec.c \
 				$(SRC_DIR)/lexer/token.c \
 				$(SRC_DIR)/lexer/lexer.c \
 				$(SRC_DIR)/lexer/lexer_word.c  \
@@ -50,6 +51,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/parser/parser.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \
+				$(SRC_DIR)/parser/heredoc_child.c \
 				$(SRC_DIR)/expand/expand.c \
 				$(SRC_DIR)/builtins/builtin_echo.c \
 				$(SRC_DIR)/builtins/builtin_env.c \

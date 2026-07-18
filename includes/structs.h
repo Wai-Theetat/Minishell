@@ -20,35 +20,35 @@ typedef struct s_cmd
 	char				*arg_quotes;
 	char				*infile;
 	char				*outfile;
-	int append;          // '>>' flag
-	char *heredoc_delim; // the << WORD
+	int					append;
+	char				*heredoc_delim;
 	int					heredoc_expand;
-	int heredoc_fd;      // read end of pipe, -1 if none
+	int					heredoc_fd;
 	struct s_cmd		*next;
 }						t_cmd;
 
 typedef struct s_shell
 {
-	t_cmd *cmds; // linked list of commands
-	t_env *envp; // linked list of environment path
+	t_cmd				*cmds;
+	t_env				*envp;
 	int					exit_code;
 }						t_shell;
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,            /* Regular txt/arg */
-	TOKEN_PIPE,            /* | */
-	TOKEN_REDIRECT_IN,     /* < */
-	TOKEN_REDIRECT_OUT,    /* > */
-	TOKEN_REDIRECT_APPEND, /* >> */
-	TOKEN_HEREDOC,         /* << */
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_REDIRECT_APPEND,
+	TOKEN_HEREDOC,
 	TOKEN_EOF
 }						t_token_type;
 
 typedef struct s_token
 {
 	t_token_type		type;
-	char *value; // NULL=op,str=WORD
+	char				*value;
 	char				quote;
 	struct s_token		*next;
 }						t_token;

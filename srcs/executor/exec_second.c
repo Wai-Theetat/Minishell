@@ -17,6 +17,7 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 	char	*path;
 	char	**env;
 
+	set_child_signals();
 	if (apply_redirects(cmd) == -1)
 		exit(1);
 	if (!cmd->args || !cmd->args[0])
@@ -67,6 +68,7 @@ int	exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two, t_shell *shell)
 
 	if (pipe(fd) == -1)
 		return (perror("pipe"), -1);
+	set_exec_signals();
 	pid_1 = fork();
 	if (pid_1 == 0)
 		child_left(fd, cmd_one, shell);
@@ -77,6 +79,8 @@ int	exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two, t_shell *shell)
 	close(fd[1]);
 	waitpid(pid_1, NULL, 0);
 	waitpid(pid_2, &status, 0);
+	set_prompt_signals();
+	print_signal_msg(status);
 	shell->exit_code = pipe_status_code(status);
 	return (shell->exit_code);
 }
