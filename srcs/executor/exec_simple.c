@@ -31,6 +31,8 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 			return (update_shell_exit_code(shell, -1));
 		}
 	}
+	set_prompt_signals();
+	print_signal_msg(status);
 	if (WIFEXITED(status))
 		return (update_shell_exit_code(shell, WEXITSTATUS(status)));
 	if (WIFSIGNALED(status))
@@ -40,6 +42,7 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 
 static void	run_child(char *path, t_cmd *cmd, char **envp)
 {
+	set_child_signals();
 	if (apply_redirects(cmd) == -1)
 	{
 		free(path);
@@ -63,10 +66,12 @@ int	exec_external_cmd(t_cmd *cmd, t_env *envp, t_shell *shell)
 	if (!path)
 		return (update_shell_exit_code(shell,
 				exec_not_found_code(cmd->args[0])));
+	set_exec_signals();
 	pid = fork();
 	if (pid < 0)
 	{
 		free(path);
+		set_prompt_signals();
 		return (update_shell_exit_code(shell, -1));
 	}
 	if (pid == 0)
