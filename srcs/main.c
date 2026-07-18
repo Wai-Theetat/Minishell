@@ -97,5 +97,5 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_code = 0;
 	shell.cmds = NULL;
 	run_shell(&shell);
-	return (0);
+	return (shell.exit_code);
 }
