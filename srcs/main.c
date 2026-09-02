@@ -14,8 +14,13 @@
 
 void	run_cmd(t_shell *shell)
 {
-	if (!shell || !shell->cmds || !shell->cmds->args || !shell->cmds->args[0])
+	if (!shell || !shell->cmds)
 		return ;
+	if (!shell->cmds->next && (!shell->cmds->args || !shell->cmds->args[0]))
+	{
+		shell->exit_code = run_redir_only(shell->cmds);
+		return ;
+	}
 	if (!shell->cmds->next)
 		shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
 	else if (!shell->cmds->next->next)
@@ -55,7 +60,10 @@ static void	process_input(t_shell *shell, char *full)
 		ft_expand(shell->cmds, shell->envp, shell->exit_code);
 		if (g_signal != SIGINT)
 			run_cmd(shell);
+		redir_close_heredocs(shell->cmds);
 	}
+	else
+		shell->exit_code = 2;
 	ft_gc_clear();
 }
 

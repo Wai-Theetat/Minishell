@@ -36,12 +36,21 @@ static char	*get_quote_state(const char *input)
 
 static char	*get_pipe_state(const char *input)
 {
-	int	i;
+	t_token	*tokens;
+	t_token	*last;
+	t_token	*prev;
 
-	i = ft_strlen(input) - 1;
-	while (i >= 0 && input[i] == ' ')
-		i--;
-	if (i >= 0 && input[i] == '|')
+	tokens = ft_lexer(input);
+	if (!tokens)
+		return (NULL);
+	last = tokens;
+	prev = NULL;
+	while (last->next && last->next->type != TOKEN_EOF)
+	{
+		prev = last;
+		last = last->next;
+	}
+	if (last->type == TOKEN_PIPE && prev && prev->type == TOKEN_WORD)
 		return ("pipe> ");
 	return (NULL);
 }

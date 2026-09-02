@@ -29,3 +29,14 @@ int	ft_iswordend(char c, char quote)
 	return (c == ' ' || c == '\t'
 		|| c == '|' || c == '<' || c == '>');
 }
+
+int	is_ambiguous_redir(t_token *r)
+{
+	if (r->type == TOKEN_HEREDOC || r->quote != 0)
+		return (0);
+	if (!r->value || !r->value[0])
+		return (1);
+	if (ft_strchr(r->value, ' '))
+		return (1);
+	return (0);
+}

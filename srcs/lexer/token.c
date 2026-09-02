@@ -22,6 +22,7 @@ t_token	*ft_token_new(t_token_type type, char *value, char quote)
 	token->type = type;
 	token->value = value;
 	token->quote = quote;
+	token->fd = -1;
 	return (token);
 }
 

@@ -29,27 +29,17 @@ static int	count_args(t_token *tok)
 static void	parse_redir(t_token **tok, t_cmd *cmd)
 {
 	t_token_type	type;
+	t_token			*node;
 
 	type = (*tok)->type;
 	*tok = (*tok)->next;
 	if (!*tok || (*tok)->type != TOKEN_WORD)
 		return ;
-	if (type == TOKEN_REDIRECT_IN)
-		cmd->infile = (*tok)->value;
-	else if (type == TOKEN_REDIRECT_OUT)
+	node = ft_token_new(type, (*tok)->value, (*tok)->quote);
+	if (node)
 	{
-		cmd->outfile = (*tok)->value;
-		cmd->append = 0;
-	}
-	else if (type == TOKEN_REDIRECT_APPEND)
-	{
-		cmd->outfile = (*tok)->value;
-		cmd->append = 1;
-	}
-	else if (type == TOKEN_HEREDOC)
-	{
-		cmd->heredoc_delim = (*tok)->value;
-		cmd->heredoc_expand = ((*tok)->quote == 0);
+		node->raw = (*tok)->value;
+		ft_token_add_back(&cmd->redirs, node);
 	}
 	*tok = (*tok)->next;
 }
@@ -84,9 +74,8 @@ static t_cmd	*parse_cmd(t_token **tok, t_env *env, int exit_code)
 		else
 			parse_redir(tok, cmd);
 	}
-	if (cmd->heredoc_delim)
-		cmd->heredoc_fd = ft_heredoc(cmd->heredoc_delim,
-				cmd->heredoc_expand, env, exit_code);
+	if (redir_run_heredocs(cmd, env, exit_code) == -1)
+		return (NULL);
 	return (cmd);
 }
 

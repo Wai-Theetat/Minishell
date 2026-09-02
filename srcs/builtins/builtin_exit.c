@@ -11,17 +11,52 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <limits.h>
+
+static int	is_overflow(const char *str, int sign)
+{
+	long long	limit_div;
+	long long	limit_mod;
+	long long	acc;
+	int			digit;
+
+	if (sign == 1)
+	{
+		limit_div = LLONG_MAX / 10;
+		limit_mod = LLONG_MAX % 10;
+	}
+	else
+	{
+		limit_div = -(LLONG_MIN / 10);
+		limit_mod = -(LLONG_MIN % 10);
+	}
+	acc = 0;
+	while (*str)
+	{
+		digit = *str - '0';
+		if (acc > limit_div || (acc == limit_div && digit > limit_mod))
+			return (1);
+		acc = acc * 10 + digit;
+		str++;
+	}
+	return (0);
+}
 
 int	is_numeric(char *str)
 {
 	int	i;
+	int	sign;
 
 	i = 0;
 	if (!str || !*str)
 		return (0);
-	i = 0;
+	sign = 1;
 	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sign = -1;
 		i++;
+	}
 	if (!str[i])
 		return (0);
 	while (str[i])
@@ -30,6 +65,8 @@ int	is_numeric(char *str)
 			return (0);
 		i++;
 	}
+	if (is_overflow(str + (str[0] == '+' || str[0] == '-'), sign))
+		return (0);
 	return (1);
 }
 

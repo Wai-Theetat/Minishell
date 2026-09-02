@@ -83,7 +83,7 @@ char	*find_exec(char *cmd, t_env *envp)
 	char	*path_env;
 	char	**paths;
 
-	if (!cmd)
+	if (!cmd || !*cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
