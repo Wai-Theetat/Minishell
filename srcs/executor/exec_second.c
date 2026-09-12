@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 14:46:06 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/19 23:35:47 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 	char	*path;
 	char	**env;
 
-	set_child_signals();
-	if (apply_redirects(cmd) == -1)
+	ft_expand_cmd(cmd, shell->envp, shell->exit_code);
+	if (apply_redir_list(cmd->redirs) == -1)
 		exit(1);
 	if (!cmd->args || !cmd->args[0])
 		exit(0);
@@ -43,44 +43,20 @@ int	pipe_status_code(int status)
 	return (-1);
 }
 
-void	child_left(int fd[2], t_cmd *cmd, t_shell *shell)
+/*
+** Runs one member of a pipeline (or a forked subshell) - never returns.
+*/
+void	child_exec_node(t_node *node, t_shell *shell)
 {
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	exec_each_cmd(cmd, shell);
-}
-
-static void	child_right(int fd[2], t_cmd *cmd, t_shell *shell)
-{
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	exec_each_cmd(cmd, shell);
-}
-
-int	exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two, t_shell *shell)
-{
-	int		fd[2];
-	int		status;
-	pid_t	pid_1;
-	pid_t	pid_2;
-
-	if (pipe(fd) == -1)
-		return (perror("pipe"), -1);
-	set_exec_signals();
-	pid_1 = fork();
-	if (pid_1 == 0)
-		child_left(fd, cmd_one, shell);
-	pid_2 = fork();
-	if (pid_2 == 0)
-		child_right(fd, cmd_two, shell);
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(pid_1, NULL, 0);
-	waitpid(pid_2, &status, 0);
-	set_prompt_signals();
-	print_signal_msg(status);
-	shell->exit_code = pipe_status_code(status);
-	return (shell->exit_code);
+	set_child_signals();
+	if (node->type == NODE_CMD)
+		exec_each_cmd(node->cmd, shell);
+	if (node->type == NODE_SUBSHELL)
+	{
+		ft_expand_redirs(node->redirs, shell->envp, shell->exit_code);
+		if (apply_redir_list(node->redirs) == -1)
+			exit(1);
+		exit(exec_node(node->left, shell));
+	}
+	exit(exec_node(node, shell));
 }

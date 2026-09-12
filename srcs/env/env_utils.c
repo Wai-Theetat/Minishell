@@ -33,7 +33,8 @@ char	**ft_env_to_char(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		arr[i++] = ft_strjoin(ft_strjoin(tmp->key, "="), tmp->value);
+		if (tmp->has_value)
+			arr[i++] = ft_strjoin(ft_strjoin(tmp->key, "="), tmp->value);
 		tmp = tmp->next;
 	}
 	arr[i] = NULL;
@@ -45,7 +46,11 @@ char	*ft_env_get(t_env *env, char *key)
 	while (env)
 	{
 		if (ft_strncmp(env->key, key, ft_strlen(key) + 1) == 0)
+		{
+			if (!env->has_value)
+				return (NULL);
 			return (env->value);
+		}
 		env = env->next;
 	}
 	return (NULL);
@@ -62,6 +67,7 @@ void	ft_env_set(t_env **env, char *key, char *value)
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(value);
+			tmp->has_value = 1;
 			return ;
 		}
 		tmp = tmp->next;

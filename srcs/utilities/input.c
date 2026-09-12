@@ -80,6 +80,8 @@ char	*read_full_input(char *first)
 	char	*prompt;
 
 	input = first;
+	if (!shell_interactive())
+		return (input);
 	prompt = get_continue_prompt(input);
 	while (prompt)
 	{

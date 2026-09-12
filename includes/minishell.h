@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 16:02:02 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/07/18 15:21:13 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../libft/libft.h"
 # include "structs.h"
+# include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <signal.h>
@@ -50,6 +51,8 @@ void							ft_env_list(t_env **envp);
 char							**ft_env_to_char(t_env *env);
 char							*ft_env_get(t_env *env, char *key);
 void							ft_env_set(t_env **env, char *key, char *value);
+void							ft_env_mark(t_env **env, char *key);
+t_env							*ft_env_reorder(t_env *env);
 void							ft_env_unset(t_env **env, char *key);
 
 // ====Lexer===
@@ -60,38 +63,64 @@ char							*ft_token_value_dup(const char *src);
 int								ft_token_list_size(t_token *lst);
 t_token							*ft_lex_word(const char *input, int *i);
 t_token							*ft_lexer(const char *input);
+const char						*token_text(t_token *tok);
 
 // ====Parser===
-t_cmd							*ft_parser(t_token *tok, t_env *env,
-									int exit_code);
-int								ft_syntax_check(t_token *tok);
+t_node							*ft_parser(t_token *tok);
+t_node							*node_new(t_node_type type);
+t_node							*parse_list(t_parse *p);
+t_node							*parse_pipeline(t_parse *p);
+t_node							*parse_command(t_parse *p);
+t_node							*parse_arith(t_parse *p);
+t_node							*parse_subshell(t_parse *p);
+t_node							*parse_simple(t_parse *p);
+void							parse_redir(t_parse *p, t_token **redirs);
+t_token							*dup_word(t_token *src, t_token_type type);
+int								is_redir_type(t_token_type type);
+void							syntax_error(t_parse *p, t_token *tok);
 int								ft_heredoc(const char *delim, int expand,
 									t_env *env, int exit_code);
 void							heredoc_child(int *pipefd, t_hdoc *h);
+int								ast_run_heredocs(t_node *node, t_env *env,
+									int exit_code);
+void							ast_close_heredocs(t_node *node);
+int								redir_run_heredocs(t_token *redirs, t_env *env,
+									int exit_code);
 
 // ====Expand===
-void							ft_expand(t_cmd *cmds, t_env *env,
+void							ft_expand_cmd(t_cmd *cmd, t_env *env,
+									int exit_code);
+void							ft_expand_redirs(t_token *redirs, t_env *env,
 									int exit_code);
 char							*expand_str(const char *str, t_env *env,
 									int exit_code);
+t_wstr							expand_word(const char *str, const char *mask,
+									t_env *env, int exit_code);
+void							wstr_init(t_wstr *w);
+void							wstr_addc(t_wstr *w, char c, char m);
+void							wstr_addstr(t_wstr *w, const char *s, char m);
+int								split_fields(t_wstr *w, t_wstr *out, int max);
+void							argv_init(t_argv *a);
+void							argv_push(t_argv *a, char *s);
+char							**glob_word(t_wstr *field, int *count);
+int								has_wildcard(t_wstr *field);
+int								ft_collate_cmp(const char *a, const char *b);
 
 // ====Exec===
 char							*find_exec(char *cmd, t_env *envp);
 int								exec_not_found_code(char *cmd);
+int								exec_node(t_node *node, t_shell *shell);
+void							child_exec_node(t_node *node, t_shell *shell);
 int								exec_simple(t_cmd *cmd, t_env *envp,
 									t_shell *shell);
 void							exec_each_cmd(t_cmd *cmd, t_shell *shell);
-int								exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two,
-									t_shell *shell);
-int								apply_redirects(t_cmd *cmd);
+int								exec_pipeline(t_node *node, t_shell *shell);
+int								exec_subshell(t_node *node, t_shell *shell);
+int								exec_arith(t_node *node, t_shell *shell);
+int								apply_redir_list(t_token *redirs);
 int								run_redir_only(t_cmd *cmd);
-int								redir_run_heredocs(t_cmd *cmd, t_env *env,
-									int exit_code);
-void							redir_close_heredocs(t_cmd *cmds);
-int								exec_n_pipe(t_shell *shell);
-void							cmd_loop(int prev_read, int fd[2],
-									t_cmd *current_cmd, t_shell *shell);
 int								pipe_status_code(int status);
+int								wait_last(pid_t last, pid_t *pids, int count);
 
 // ====Builtins===
 int								builtin_echo(t_cmd *cmd);
@@ -101,14 +130,15 @@ int								builtin_exit(t_cmd *cmd, t_shell *shell);
 int								builtin_pwd(void);
 int								builtin_cd(t_cmd *cmd, t_shell *shell);
 int								builtin_unset(t_cmd *cmd, t_shell *shell);
+int								export_list(t_env *env);
 int								is_builtin(char *cmd_name);
 int								run_builtin(t_cmd *cmd, t_shell *shell);
 int								run_builtin_redir(t_cmd *cmd, t_shell *shell);
 
 // Utils
 int								ft_isspace(char c);
-int								ft_isoper(char c);
-int								ft_iswordend(char c, char quote);
+int								ft_isoper(const char *s, int i);
+int								ft_iswordend(const char *s, int i, char quote);
 void							write_msh_error(char *err_message);
 void							write_exec_error(char *exec_name,
 									char *err_message);
@@ -119,12 +149,13 @@ void							write_msh_exec_arg_error(char *exec_name,
 void							write_msh_exec_arg_error_nocolon(
 									char *exec_name, char *arg,
 									char *err_message);
-int								is_ambiguous_redir(t_token *r);
 void							ft_print_tokens(t_token *tokens);
 void							ft_print_cmds(t_cmd *cmds);
 t_token							*print_err_syntax(void);
 char							*ft_gc_strjoin(const char *s1, const char *s2);
 char							*ft_gc_itoa(int n);
+char							*ft_gc_strdup(const char *s);
 char							*read_full_input(char *first);
+int								shell_interactive(void);
 
 #endif

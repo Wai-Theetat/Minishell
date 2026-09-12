@@ -59,43 +59,18 @@ int	ft_heredoc(const char *delim, int expand, t_env *env, int exit_code)
 	return (ret);
 }
 
-int	redir_run_heredocs(t_cmd *cmd, t_env *env, int exit_code)
+int	redir_run_heredocs(t_token *redirs, t_env *env, int exit_code)
 {
-	t_token	*node;
-
-	node = cmd->redirs;
-	while (node)
+	while (redirs)
 	{
-		if (node->type == TOKEN_HEREDOC)
+		if (redirs->type == TOKEN_HEREDOC)
 		{
-			node->fd = ft_heredoc(node->value, node->quote == 0, env,
+			redirs->fd = ft_heredoc(redirs->value, redirs->quote == 0, env,
 					exit_code);
-			cmd->heredoc_fd = node->fd;
-			if (node->fd == -1)
+			if (redirs->fd == -1)
 				return (-1);
 		}
-		node = node->next;
+		redirs = redirs->next;
 	}
 	return (0);
-}
-
-void	redir_close_heredocs(t_cmd *cmds)
-{
-	t_token	*node;
-
-	while (cmds)
-	{
-		node = cmds->redirs;
-		while (node)
-		{
-			if (node->type == TOKEN_HEREDOC && node->fd != -1)
-			{
-				close(node->fd);
-				node->fd = -1;
-			}
-			node = node->next;
-		}
-		cmds->heredoc_fd = -1;
-		cmds = cmds->next;
-	}
 }

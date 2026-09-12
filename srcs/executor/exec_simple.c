@@ -43,7 +43,7 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 static void	run_child(char *path, t_cmd *cmd, char **envp)
 {
 	set_child_signals();
-	if (apply_redirects(cmd) == -1)
+	if (apply_redir_list(cmd->redirs) == -1)
 	{
 		free(path);
 		exit(1);

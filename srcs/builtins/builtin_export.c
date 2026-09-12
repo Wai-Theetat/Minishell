@@ -59,6 +59,8 @@ int	builtin_export(t_cmd *cmd, t_shell *shell)
 
 	if (!cmd || !shell || !cmd->args)
 		return (1);
+	if (!cmd->args[1])
+		return (export_list(shell->envp));
 	index = 1;
 	status = 0;
 	while (cmd->args[index])

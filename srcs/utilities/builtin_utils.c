@@ -65,7 +65,7 @@ int	run_builtin_redir(t_cmd *cmd, t_shell *shell)
 	saved_out = dup(STDOUT_FILENO);
 	if (saved_in == -1 || saved_out == -1)
 		return (perror("dup"), 1);
-	if (apply_redirects(cmd) == -1)
+	if (apply_redir_list(cmd->redirs) == -1)
 		return (restore_fds(saved_in, saved_out), 1);
 	ret = run_builtin(cmd, shell);
 	restore_fds(saved_in, saved_out);

@@ -30,8 +30,24 @@ t_env	*ft_env_new(char *key, char *value)
 		free(env_node);
 		return (NULL);
 	}
+	env_node->has_value = 1;
 	env_node->next = NULL;
 	return (env_node);
+}
+
+/*
+** bash always keeps OLDPWD in the export list, even before the first cd,
+** where it shows up as "declare -x OLDPWD" with no value attached.
+*/
+void	ft_env_mark(t_env **env, char *key)
+{
+	t_env	*node;
+
+	node = ft_env_new(key, "");
+	if (!node)
+		return ;
+	node->has_value = 0;
+	ft_env_add_back(env, node);
 }
 
 void	ft_env_add_back(t_env **env, t_env *new_env_node)
@@ -94,5 +110,8 @@ t_env	*ft_env_init(char **envp)
 		ft_env_add_back(&env, node);
 		i++;
 	}
+	env = ft_env_reorder(env);
+	if (!ft_env_get(env, "OLDPWD"))
+		ft_env_mark(&env, "OLDPWD");
 	return (env);
 }

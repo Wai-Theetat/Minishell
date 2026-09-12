@@ -6,99 +6,88 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/21 22:32:00 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	count_args(t_token *tok)
+t_node	*node_new(t_node_type type)
 {
-	int	count;
+	t_node	*node;
 
-	count = 0;
-	while (tok && tok->type != TOKEN_PIPE && tok->type != TOKEN_EOF)
-	{
-		if (tok->type == TOKEN_WORD)
-			count++;
-		tok = tok->next;
-	}
-	return (count);
-}
-
-static void	parse_redir(t_token **tok, t_cmd *cmd)
-{
-	t_token_type	type;
-	t_token			*node;
-
-	type = (*tok)->type;
-	*tok = (*tok)->next;
-	if (!*tok || (*tok)->type != TOKEN_WORD)
-		return ;
-	node = ft_token_new(type, (*tok)->value, (*tok)->quote);
-	if (node)
-	{
-		node->raw = (*tok)->value;
-		ft_token_add_back(&cmd->redirs, node);
-	}
-	*tok = (*tok)->next;
-}
-
-static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
-{
-	cmd->args[*i] = (*tok)->value;
-	cmd->arg_quotes[(*i)++] = (*tok)->quote;
-	*tok = (*tok)->next;
-}
-
-static t_cmd	*parse_cmd(t_token **tok, t_env *env, int exit_code)
-{
-	t_cmd	*cmd;
-	int		argc;
-	int		i;
-
-	cmd = ft_gc_calloc(1, sizeof(t_cmd));
-	if (!cmd)
+	node = ft_gc_calloc(1, sizeof(t_node));
+	if (!node)
 		return (NULL);
-	cmd->heredoc_fd = -1;
-	argc = count_args(*tok);
-	cmd->args = ft_gc_calloc(argc + 1, sizeof(char *));
-	cmd->arg_quotes = ft_gc_calloc(argc + 1, sizeof(char));
-	if (!cmd->args || !cmd->arg_quotes)
-		return (NULL);
-	i = 0;
-	while (*tok && (*tok)->type != TOKEN_PIPE && (*tok)->type != TOKEN_EOF)
-	{
-		if ((*tok)->type == TOKEN_WORD)
-			parse_word(tok, cmd, &i);
-		else
-			parse_redir(tok, cmd);
-	}
-	if (redir_run_heredocs(cmd, env, exit_code) == -1)
-		return (NULL);
-	return (cmd);
+	node->type = type;
+	return (node);
 }
 
-t_cmd	*ft_parser(t_token *tok, t_env *env, int exit_code)
+static t_node	*join_nodes(t_node_type type, t_node *left, t_node *right)
 {
-	t_cmd	*head;
-	t_cmd	*last;
-	t_cmd	*cmd;
+	t_node	*node;
 
-	head = NULL;
-	last = NULL;
-	while (tok && tok->type != TOKEN_EOF)
+	node = node_new(type);
+	if (!node)
+		return (NULL);
+	node->left = left;
+	node->right = right;
+	return (node);
+}
+
+t_node	*parse_pipeline(t_parse *p)
+{
+	t_node	*left;
+	t_node	*right;
+
+	left = parse_command(p);
+	if (p->error)
+		return (NULL);
+	while (p->tok && p->tok->type == TOKEN_PIPE)
 	{
-		cmd = parse_cmd(&tok, env, exit_code);
-		if (!cmd)
+		p->tok = p->tok->next;
+		right = parse_command(p);
+		if (p->error)
 			return (NULL);
-		if (!head)
-			head = cmd;
-		else
-			last->next = cmd;
-		last = cmd;
-		if (tok && tok->type == TOKEN_PIPE)
-			tok = tok->next;
+		left = join_nodes(NODE_PIPE, left, right);
 	}
-	return (head);
+	return (left);
+}
+
+t_node	*parse_list(t_parse *p)
+{
+	t_node		*left;
+	t_node		*right;
+	t_node_type	type;
+
+	left = parse_pipeline(p);
+	if (p->error)
+		return (NULL);
+	while (p->tok && (p->tok->type == TOKEN_AND || p->tok->type == TOKEN_OR))
+	{
+		type = NODE_AND;
+		if (p->tok->type == TOKEN_OR)
+			type = NODE_OR;
+		p->tok = p->tok->next;
+		right = parse_pipeline(p);
+		if (p->error)
+			return (NULL);
+		left = join_nodes(type, left, right);
+	}
+	return (left);
+}
+
+t_node	*ft_parser(t_token *tok)
+{
+	t_parse	p;
+	t_node	*root;
+
+	p.tok = tok;
+	p.error = 0;
+	root = parse_list(&p);
+	if (p.error)
+		return (NULL);
+	if (p.tok && p.tok->type != TOKEN_EOF)
+		return (syntax_error(&p, p.tok), NULL);
+	return (root);
 }

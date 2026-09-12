@@ -6,63 +6,45 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/05/28 14:25:35 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_redir(t_token_type type)
+const char	*token_text(t_token *tok)
 {
-	return (type == TOKEN_REDIRECT_IN
-		|| type == TOKEN_REDIRECT_OUT
-		|| type == TOKEN_REDIRECT_APPEND
-		|| type == TOKEN_HEREDOC);
+	static const char	*names[] = {"", "|", "&&", "||", "(", ")", "<", ">",
+		">>", "<<", "newline"};
+
+	if (!tok)
+		return (NULL);
+	if (tok->type == TOKEN_WORD)
+		return (tok->value);
+	if (tok->type == TOKEN_EOF)
+		return (NULL);
+	return (names[tok->type]);
 }
 
-static int	check_pipe(t_token *tok)
+/*
+** Reports the first token the parser could not accept.  A missing token
+** (end of input) uses the same wording as bash so that the tester sees an
+** identical trailing message.
+*/
+void	syntax_error(t_parse *p, t_token *tok)
 {
-	if (tok->type == TOKEN_PIPE)
-	{
-		ft_putstr_fd("minishell: syntax error near token `|'\n", 2);
-		return (0);
-	}
-	return (1);
-}
+	const char	*text;
 
-static int	check_token(t_token *tok)
-{
-	if (tok->type == TOKEN_PIPE)
+	if (p->error)
+		return ;
+	p->error = 1;
+	text = token_text(tok);
+	if (!text)
 	{
-		if (!tok->next || tok->next->type == TOKEN_EOF
-			|| tok->next->type == TOKEN_PIPE)
-		{
-			ft_putstr_fd("minishell: syntax error near token `|'\n", 2);
-			return (0);
-		}
+		ft_putstr_fd("minishell: syntax error: unexpected end of file\n", 2);
+		return ;
 	}
-	if (is_redir(tok->type))
-	{
-		if (!tok->next || tok->next->type != TOKEN_WORD)
-		{
-			ft_putstr_fd("minishell: syntax error near token `newline'\n", 2);
-			return (0);
-		}
-	}
-	return (1);
-}
-
-int	ft_syntax_check(t_token *tok)
-{
-	if (!tok || tok->type == TOKEN_EOF)
-		return (1);
-	if (!check_pipe(tok))
-		return (0);
-	while (tok && tok->type != TOKEN_EOF)
-	{
-		if (!check_token(tok))
-			return (0);
-		tok = tok->next;
-	}
-	return (1);
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd((char *)text, 2);
+	ft_putstr_fd("'\n", 2);
 }

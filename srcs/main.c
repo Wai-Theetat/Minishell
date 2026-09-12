@@ -6,47 +6,25 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/25 15:54:10 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/22 09:54:46 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	run_cmd(t_shell *shell)
+static void	run_line(t_shell *shell, t_token *tokens)
 {
-	if (!shell || !shell->cmds)
-		return ;
-	if (!shell->cmds->next && (!shell->cmds->args || !shell->cmds->args[0]))
+	shell->ast = ft_parser(tokens);
+	if (!shell->ast)
 	{
-		shell->exit_code = run_redir_only(shell->cmds);
+		shell->exit_code = 2;
 		return ;
 	}
-	if (!shell->cmds->next)
-		shell->exit_code = exec_simple(shell->cmds, shell->envp, shell);
-	else if (!shell->cmds->next->next)
-		shell->exit_code = exec_2_pipe(shell->cmds, shell->cmds->next, shell);
-	else
-		shell->exit_code = exec_n_pipe(shell);
-}
-
-static void	print_heredoc_content(t_cmd *cmds)
-{
-	char	buf[1024];
-	int		n;
-
-	while (cmds)
-	{
-		if (cmds->heredoc_fd != -1)
-		{
-			ft_printf("  heredoc content:\n");
-			n = read(cmds->heredoc_fd, buf, 1023);
-			buf[n] = '\0';
-			ft_printf("%s\n", buf);
-			close(cmds->heredoc_fd);
-			cmds->heredoc_fd = -1;
-		}
-		cmds = cmds->next;
-	}
+	if (ast_run_heredocs(shell->ast, shell->envp, shell->exit_code) == -1)
+		return ;
+	if (g_signal != SIGINT)
+		exec_node(shell->ast, shell);
+	ast_close_heredocs(shell->ast);
 }
 
 static void	process_input(t_shell *shell, char *full)
@@ -54,16 +32,11 @@ static void	process_input(t_shell *shell, char *full)
 	t_token	*tokens;
 
 	tokens = ft_lexer(full);
-	if (tokens && ft_syntax_check(tokens))
-	{
-		shell->cmds = ft_parser(tokens, shell->envp, shell->exit_code);
-		ft_expand(shell->cmds, shell->envp, shell->exit_code);
-		if (g_signal != SIGINT)
-			run_cmd(shell);
-		redir_close_heredocs(shell->cmds);
-	}
-	else
+	if (!tokens)
 		shell->exit_code = 2;
+	else if (tokens->type != TOKEN_EOF)
+		run_line(shell, tokens);
+	shell->ast = NULL;
 	ft_gc_clear();
 }
 
@@ -103,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	shell.envp = ft_env_init(envp);
 	shell.exit_code = 0;
-	shell.cmds = NULL;
+	shell.ast = NULL;
 	run_shell(&shell);
 	return (shell.exit_code);
 }

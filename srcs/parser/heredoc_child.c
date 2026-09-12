@@ -31,13 +31,24 @@ static void	write_one_line(int fd, char *line, t_hdoc *h)
 	ft_putchar_fd('\n', fd);
 }
 
+/*
+** bash writes the heredoc prompt to the terminal, never to stdout, so a
+** piped script never sees it.
+*/
+static char	*heredoc_readline(void)
+{
+	if (shell_interactive())
+		return (readline("> "));
+	return (readline(NULL));
+}
+
 static void	write_lines(int fd, t_hdoc *h)
 {
 	char	*line;
 
 	while (1)
 	{
-		line = readline("> ");
+		line = heredoc_readline();
 		if (!line || g_signal == SIGINT)
 		{
 			if (!line)

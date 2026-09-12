@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:17:18 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 15:47:14 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 void	ft_print_tokens(t_token *tokens)
 {
-	const char	*type_names[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
-		"REDIRECT_APPEND", "HEREDOC", "EOF"};
+	const char	*type_names[] = {"WORD", "PIPE", "AND", "OR", "LPAREN",
+		"RPAREN", "REDIRECT_IN", "REDIRECT_OUT", "REDIRECT_APPEND", "HEREDOC",
+		"EOF"};
 
 	while (tokens)
 	{
@@ -36,32 +37,28 @@ void	ft_print_tokens(t_token *tokens)
 
 t_token	*print_err_syntax(void)
 {
-	ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
+	ft_putstr_fd("minishell: unexpected EOF while looking for matching quote\n",
+		2);
 	return (NULL);
 }
 
 void	ft_print_cmds(t_cmd *cmds)
 {
 	int		i;
-	int		cmd_num;
 	t_token	*r;
 
-	cmd_num = 0;
-	while (cmds)
+	if (!cmds)
+		return ;
+	i = 0;
+	while (cmds->args && cmds->args[i])
 	{
-		ft_printf("--- CMD %d ---\n", cmd_num++);
-		i = 0;
-		while (cmds->args && cmds->args[i])
-		{
-			ft_printf("  args[%d] = '%s'\n", i, cmds->args[i]);
-			i++;
-		}
-		r = cmds->redirs;
-		while (r)
-		{
-			ft_printf("  redir type=%d value='%s'\n", r->type, r->value);
-			r = r->next;
-		}
-		cmds = cmds->next;
+		ft_printf("  args[%d] = '%s'\n", i, cmds->args[i]);
+		i++;
+	}
+	r = cmds->redirs;
+	while (r)
+	{
+		ft_printf("  redir type=%d value='%s'\n", r->type, r->value);
+		r = r->next;
 	}
 }

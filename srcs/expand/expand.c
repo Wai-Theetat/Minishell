@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/31 01:10:51 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/21 22:28:06 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:00:00 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,48 @@ static char	*get_var(const char *str, int *i, t_env *env, int exit_code)
 	return (val);
 }
 
+static int	is_var_start(const char *str, const char *mask, int i)
+{
+	if (str[i] != '$' || mask[i] == 2)
+		return (0);
+	if (!str[i + 1])
+		return (0);
+	return (ft_isalpha(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?');
+}
+
+/*
+** Expands $VAR / $? while keeping track of what may still be word-split and
+** globbed afterwards: characters that came from a quoted section - and the
+** text of a variable that was referenced inside double quotes - are marked
+** protected (mask byte 1).
+*/
+t_wstr	expand_word(const char *str, const char *mask, t_env *env,
+		int exit_code)
+{
+	t_wstr	w;
+	char	*val;
+	int		i;
+	int		start;
+
+	wstr_init(&w);
+	i = 0;
+	while (str && str[i])
+	{
+		if (is_var_start(str, mask, i))
+		{
+			start = i;
+			val = get_var(str, &i, env, exit_code);
+			wstr_addstr(&w, val, mask[start] == 1);
+		}
+		else
+		{
+			wstr_addc(&w, str[i], mask[i] != 0);
+			i++;
+		}
+	}
+	return (w);
+}
+
 char	*expand_str(const char *str, t_env *env, int exit_code)
 {
 	char	*result;
@@ -72,59 +114,4 @@ char	*expand_str(const char *str, t_env *env, int exit_code)
 		}
 	}
 	return (result);
-}
-
-static void	remove_empty_args(t_cmd *cmd)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cmd->args && cmd->args[i])
-	{
-		if (cmd->arg_quotes[i] == 0 && cmd->args[i][0] == '\0')
-		{
-			i++;
-			continue ;
-		}
-		cmd->args[j] = cmd->args[i];
-		cmd->arg_quotes[j] = cmd->arg_quotes[i];
-		i++;
-		j++;
-	}
-	if (cmd->args)
-		cmd->args[j] = NULL;
-}
-
-static void	expand_cmd(t_cmd *cmd, t_env *env, int exit_code)
-{
-	int		i;
-	t_token	*r;
-
-	i = 0;
-	while (cmd->args && cmd->args[i])
-	{
-		if (cmd->arg_quotes[i] != '\'')
-			cmd->args[i] = expand_str(cmd->args[i], env, exit_code);
-		i++;
-	}
-	remove_empty_args(cmd);
-	r = cmd->redirs;
-	while (r)
-	{
-		if (r->type != TOKEN_HEREDOC && r->quote != '\'')
-			r->value = expand_str(r->value, env, exit_code);
-		r->ambiguous = is_ambiguous_redir(r);
-		r = r->next;
-	}
-}
-
-void	ft_expand(t_cmd *cmds, t_env *env, int exit_code)
-{
-	while (cmds)
-	{
-		expand_cmd(cmds, env, exit_code);
-		cmds = cmds->next;
-	}
 }

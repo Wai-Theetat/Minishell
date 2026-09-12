@@ -48,20 +48,31 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/executor/exec_second.c \
 				$(SRC_DIR)/executor/exec_utils.c \
 				$(SRC_DIR)/executor/exec_n.c \
+				$(SRC_DIR)/executor/exec_node.c \
 				$(SRC_DIR)/parser/parser.c \
+				$(SRC_DIR)/parser/parse_cmd.c \
+				$(SRC_DIR)/parser/parse_sub.c \
 				$(SRC_DIR)/parser/syntax.c \
 				$(SRC_DIR)/parser/heredoc.c \
+				$(SRC_DIR)/parser/heredoc_ast.c \
 				$(SRC_DIR)/parser/heredoc_child.c \
 				$(SRC_DIR)/expand/expand.c \
+				$(SRC_DIR)/expand/expand_cmd.c \
+				$(SRC_DIR)/expand/wstr.c \
+				$(SRC_DIR)/expand/field.c \
+				$(SRC_DIR)/expand/wildcard.c \
+				$(SRC_DIR)/expand/collate.c \
 				$(SRC_DIR)/builtins/builtin_echo.c \
 				$(SRC_DIR)/builtins/builtin_env.c \
 				$(SRC_DIR)/builtins/builtin_exit.c \
 				$(SRC_DIR)/builtins/builtin_pwd.c \
 				$(SRC_DIR)/builtins/buitlin_cd.c \
 				$(SRC_DIR)/builtins/builtin_export.c \
+				$(SRC_DIR)/builtins/builtin_export2.c \
 				$(SRC_DIR)/builtins/builtin_unset.c \
 				$(SRC_DIR)/env/env_init.c \
 				$(SRC_DIR)/env/env_utils.c \
+				$(SRC_DIR)/env/env_order.c \
 
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 DEPS		= $(OBJS:.o=.d)
