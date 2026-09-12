@@ -14,15 +14,12 @@
 # define STRUCTS_H
 
 typedef struct s_env	t_env;
+typedef struct s_token	t_token;
 typedef struct s_cmd
 {
 	char				**args;
 	char				*arg_quotes;
-	char				*infile;
-	char				*outfile;
-	int					append;
-	char				*heredoc_delim;
-	int					heredoc_expand;
+	t_token				*redirs;
 	int					heredoc_fd;
 	struct s_cmd		*next;
 }						t_cmd;
@@ -49,7 +46,10 @@ typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
+	char				*raw;
 	char				quote;
+	int					ambiguous;
+	int					fd;
 	struct s_token		*next;
 }						t_token;
 

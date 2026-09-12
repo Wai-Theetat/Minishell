@@ -12,49 +12,77 @@
 
 #include "minishell.h"
 
-static int	apply_infile(t_cmd *cmd)
+static int	open_redir(t_token *redir)
 {
-	int	fd;
+	if (redir->type == TOKEN_REDIRECT_IN)
+		return (open(redir->value, O_RDONLY));
+	if (redir->type == TOKEN_REDIRECT_APPEND)
+		return (open(redir->value, O_WRONLY | O_CREAT | O_APPEND, 0644));
+	return (open(redir->value, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+}
 
-	if (cmd->heredoc_fd != -1)
-	{
-		dup2(cmd->heredoc_fd, STDIN_FILENO);
-		close(cmd->heredoc_fd);
-		cmd->heredoc_fd = -1;
-		return (0);
-	}
-	if (!cmd->infile)
-		return (0);
-	fd = open(cmd->infile, O_RDONLY);
-	if (fd == -1)
-		return (perror(cmd->infile), -1);
-	dup2(fd, STDIN_FILENO);
-	close(fd);
+static int	apply_heredoc(t_cmd *cmd, t_token *redir)
+{
+	if (redir->fd == -1)
+		return (-1);
+	dup2(redir->fd, STDIN_FILENO);
+	close(redir->fd);
+	redir->fd = -1;
+	cmd->heredoc_fd = -1;
 	return (0);
 }
 
-static int	apply_outfile(t_cmd *cmd)
+static int	apply_one(t_cmd *cmd, t_token *redir)
 {
 	int	fd;
 
-	if (!cmd->outfile)
-		return (0);
-	if (cmd->append)
-		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (redir->type == TOKEN_HEREDOC)
+		return (apply_heredoc(cmd, redir));
+	if (redir->ambiguous)
+		return (write_msh_exec_error(redir->raw, "ambiguous redirect"), -1);
+	fd = open_redir(redir);
 	if (fd == -1)
-		return (perror(cmd->outfile), -1);
-	dup2(fd, STDOUT_FILENO);
+		return (perror(redir->value), -1);
+	if (redir->type == TOKEN_REDIRECT_IN)
+		dup2(fd, STDIN_FILENO);
+	else
+		dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (0);
 }
 
 int	apply_redirects(t_cmd *cmd)
 {
-	if (apply_infile(cmd) == -1)
-		return (-1);
-	if (apply_outfile(cmd) == -1)
-		return (-1);
+	t_token	*redir;
+
+	redir = cmd->redirs;
+	while (redir)
+	{
+		if (apply_one(cmd, redir) == -1)
+			return (-1);
+		redir = redir->next;
+	}
 	return (0);
+}
+
+int	run_redir_only(t_cmd *cmd)
+{
+	int	saved_in;
+	int	saved_out;
+	int	ret;
+
+	if (!cmd->redirs)
+		return (0);
+	saved_in = dup(STDIN_FILENO);
+	saved_out = dup(STDOUT_FILENO);
+	if (saved_in == -1 || saved_out == -1)
+		return (perror("dup"), 1);
+	ret = 0;
+	if (apply_redirects(cmd) == -1)
+		ret = 1;
+	dup2(saved_in, STDIN_FILENO);
+	dup2(saved_out, STDOUT_FILENO);
+	close(saved_in);
+	close(saved_out);
+	return (ret);
 }

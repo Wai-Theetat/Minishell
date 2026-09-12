@@ -36,14 +36,15 @@ void	ft_print_tokens(t_token *tokens)
 
 t_token	*print_err_syntax(void)
 {
-	ft_printf("minishell: syntax error: unclosed quote\n");
+	ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
 	return (NULL);
 }
 
 void	ft_print_cmds(t_cmd *cmds)
 {
-	int	i;
-	int	cmd_num;
+	int		i;
+	int		cmd_num;
+	t_token	*r;
 
 	cmd_num = 0;
 	while (cmds)
@@ -55,15 +56,12 @@ void	ft_print_cmds(t_cmd *cmds)
 			ft_printf("  args[%d] = '%s'\n", i, cmds->args[i]);
 			i++;
 		}
-		if (cmds->infile)
-			ft_printf("  infile        = '%s'\n", cmds->infile);
-		if (cmds->outfile)
-			ft_printf("  outfile       = '%s' (append=%d)\n", cmds->outfile,
-				cmds->append);
-		if (cmds->heredoc_delim)
-			ft_printf("  heredoc_delim = '%s'\n", cmds->heredoc_delim);
-		if (cmds->heredoc_fd != -1)
-			ft_printf("  heredoc_fd    = %d\n", cmds->heredoc_fd);
+		r = cmds->redirs;
+		while (r)
+		{
+			ft_printf("  redir type=%d value='%s'\n", r->type, r->value);
+			r = r->next;
+		}
 		cmds = cmds->next;
 	}
 }

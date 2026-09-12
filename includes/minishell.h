@@ -84,6 +84,10 @@ void							exec_each_cmd(t_cmd *cmd, t_shell *shell);
 int								exec_2_pipe(t_cmd *cmd_one, t_cmd *cmd_two,
 									t_shell *shell);
 int								apply_redirects(t_cmd *cmd);
+int								run_redir_only(t_cmd *cmd);
+int								redir_run_heredocs(t_cmd *cmd, t_env *env,
+									int exit_code);
+void							redir_close_heredocs(t_cmd *cmds);
 int								exec_n_pipe(t_shell *shell);
 void							cmd_loop(int prev_read, int fd[2],
 									t_cmd *current_cmd, t_shell *shell);
@@ -115,6 +119,7 @@ void							write_msh_exec_arg_error(char *exec_name,
 void							write_msh_exec_arg_error_nocolon(
 									char *exec_name, char *arg,
 									char *err_message);
+int								is_ambiguous_redir(t_token *r);
 void							ft_print_tokens(t_token *tokens);
 void							ft_print_cmds(t_cmd *cmds);
 t_token							*print_err_syntax(void);
