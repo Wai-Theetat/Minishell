@@ -3,8 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +#+#+#+#+#+  
-	+#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 18:10:00 by copilot           #+#    #+#             */
 /*   Updated: 2026/06/03 18:10:00 by copilot          ###   ########.fr       */

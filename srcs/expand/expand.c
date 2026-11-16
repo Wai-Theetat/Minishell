@@ -12,68 +12,6 @@
 
 #include "minishell.h"
 
-static int	var_len(const char *str)
-{
-	int	len;
-
-	len = 0;
-	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-		len++;
-	return (len);
-}
-
-static char	*get_var(const char *str, int *i, t_env *env, int exit_code)
-{
-	char	*key;
-	char	*val;
-	int		len;
-
-	(*i)++;
-	if (str[*i] == '?')
-	{
-		(*i)++;
-		return (ft_gc_itoa(exit_code));
-	}
-	len = var_len(str + *i);
-	if (len == 0)
-		return (ft_gc_strjoin("$", ""));
-	key = ft_gc_malloc(len + 1);
-	ft_strlcpy(key, str + *i, len + 1);
-	*i += len;
-	val = ft_env_get(env, key);
-	if (!val)
-		return (ft_gc_strjoin("", ""));
-	return (val);
-}
-
-char	*expand_str(const char *str, t_env *env, int exit_code)
-{
-	char	*result;
-	char	*tmp;
-	char	buf[2];
-	int		i;
-
-	result = ft_gc_strjoin("", "");
-	i = 0;
-	buf[1] = '\0';
-	while (str[i])
-	{
-		if (str[i] == '$' && str[i + 1]
-			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'
-				|| str[i + 1] == '?'))
-		{
-			tmp = get_var(str, &i, env, exit_code);
-			result = ft_gc_strjoin(result, tmp);
-		}
-		else
-		{
-			buf[0] = str[i++];
-			result = ft_gc_strjoin(result, buf);
-		}
-	}
-	return (result);
-}
-
 static void	remove_empty_args(t_cmd *cmd)
 {
 	int	i;
@@ -105,16 +43,15 @@ static void	expand_cmd(t_cmd *cmd, t_env *env, int exit_code)
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
-		if (cmd->arg_quotes[i] != '\'')
-			cmd->args[i] = expand_str(cmd->args[i], env, exit_code);
+		cmd->args[i] = expand_word(cmd->args[i], env, exit_code);
 		i++;
 	}
 	remove_empty_args(cmd);
 	r = cmd->redirs;
 	while (r)
 	{
-		if (r->type != TOKEN_HEREDOC && r->quote != '\'')
-			r->value = expand_str(r->value, env, exit_code);
+		if (r->type != TOKEN_HEREDOC)
+			r->value = expand_word(r->value, env, exit_code);
 		r->ambiguous = is_ambiguous_redir(r);
 		r = r->next;
 	}

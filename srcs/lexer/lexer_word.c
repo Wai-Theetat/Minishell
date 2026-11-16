@@ -45,8 +45,6 @@ static void	handle_quote(const char *input, int *pos, char *quote, char *q)
 {
 	if (*q == 0)
 		*q = input[*pos];
-	else if (*q != input[*pos])
-		*q = 0;
 	*quote = input[(*pos)++];
 }
 
@@ -93,9 +91,14 @@ t_token	*ft_lex_word(const char *input, int *i)
 {
 	char	*value;
 	char	quote;
+	int		start;
+	t_token	*token;
 
+	start = *i;
 	value = collect_word(input, i, &quote);
 	if (!value)
 		return (NULL);
-	return (ft_token_new(TOKEN_WORD, value, quote));
+	token = ft_token_new(TOKEN_WORD, value, quote);
+	token->raw = ft_gc_substr(input, start, *i - start);
+	return (token);
 }

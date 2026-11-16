@@ -35,10 +35,13 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 	*tok = (*tok)->next;
 	if (!*tok || (*tok)->type != TOKEN_WORD)
 		return ;
-	node = ft_token_new(type, (*tok)->value, (*tok)->quote);
+	if (type == TOKEN_HEREDOC)
+		node = ft_token_new(type, (*tok)->value, (*tok)->quote);
+	else
+		node = ft_token_new(type, (*tok)->raw, (*tok)->quote);
 	if (node)
 	{
-		node->raw = (*tok)->value;
+		node->raw = (*tok)->raw;
 		ft_token_add_back(&cmd->redirs, node);
 	}
 	*tok = (*tok)->next;
@@ -46,7 +49,7 @@ static void	parse_redir(t_token **tok, t_cmd *cmd)
 
 static void	parse_word(t_token **tok, t_cmd *cmd, int *i)
 {
-	cmd->args[*i] = (*tok)->value;
+	cmd->args[*i] = (*tok)->raw;
 	cmd->arg_quotes[(*i)++] = (*tok)->quote;
 	*tok = (*tok)->next;
 }

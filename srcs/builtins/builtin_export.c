@@ -3,8 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +#+#+#+#+#+  
-	+#+        */
+/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 18:10:00 by copilot           #+#    #+#             */
 /*   Updated: 2026/06/03 18:10:00 by copilot          ###   ########.fr       */
@@ -59,6 +58,8 @@ int	builtin_export(t_cmd *cmd, t_shell *shell)
 
 	if (!cmd || !shell || !cmd->args)
 		return (1);
+	if (!cmd->args[1])
+		return (print_export(shell->envp));
 	index = 1;
 	status = 0;
 	while (cmd->args[index])

@@ -28,6 +28,15 @@ char	*ft_gc_strjoin(const char *s1, const char *s2)
 	return (res);
 }
 
+char	*ft_gc_substr(const char *s, int start, int len)
+{
+	char	*res;
+
+	res = ft_gc_malloc(len + 1);
+	ft_strlcpy(res, s + start, len + 1);
+	return (res);
+}
+
 char	*ft_gc_itoa(int n)
 {
 	char	*str;

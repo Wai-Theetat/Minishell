@@ -12,28 +12,36 @@
 
 #include "minishell.h"
 
+static size_t	env_count(t_env *env)
+{
+	size_t	count;
+
+	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
 char	**ft_env_to_char(t_env *env)
 {
 	char	**arr;
 	t_env	*tmp;
-	size_t	count;
+	char	*key_eq;
 	size_t	i;
 
-	count = 0;
-	tmp = env;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	arr = (char **)malloc(sizeof(char *) * (count + 1));
+	arr = (char **)malloc(sizeof(char *) * (env_count(env) + 1));
 	if (!arr)
 		return (NULL);
 	i = 0;
 	tmp = env;
 	while (tmp)
 	{
-		arr[i++] = ft_strjoin(ft_strjoin(tmp->key, "="), tmp->value);
+		key_eq = ft_strjoin(tmp->key, "=");
+		arr[i++] = ft_strjoin(key_eq, tmp->value);
+		free(key_eq);
 		tmp = tmp->next;
 	}
 	arr[i] = NULL;
@@ -78,7 +86,7 @@ void	ft_env_unset(t_env **env, char *key)
 	current = *env;
 	while (current != NULL)
 	{
-		if (strcmp(current->key, key) == 0)
+		if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
@@ -92,23 +100,4 @@ void	ft_env_unset(t_env **env, char *key)
 		prev = current;
 		current = current->next;
 	}
-}
-
-// test env_list
-void	ft_env_list(t_env **envp)
-{
-	t_env	*current_node;
-
-	if (!envp)
-		return ;
-	current_node = *envp;
-	while (current_node)
-	{
-		printf("%s:%s", current_node->key, current_node->value);
-		if (current_node->next)
-			printf(" -> ");
-		current_node = current_node->next;
-	}
-	printf("\n");
-	return ;
 }

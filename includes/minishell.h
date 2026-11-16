@@ -46,7 +46,6 @@ void							ft_env_add_back(t_env **env,
 									t_env *new_env_node);
 t_env							*ft_env_from_line(char *line);
 t_env							*ft_env_init(char **envp);
-void							ft_env_list(t_env **envp);
 char							**ft_env_to_char(t_env *env);
 char							*ft_env_get(t_env *env, char *key);
 void							ft_env_set(t_env **env, char *key, char *value);
@@ -74,6 +73,8 @@ void							ft_expand(t_cmd *cmds, t_env *env,
 									int exit_code);
 char							*expand_str(const char *str, t_env *env,
 									int exit_code);
+char							*expand_word(const char *str, t_env *env,
+									int exit_code);
 
 // ====Exec===
 char							*find_exec(char *cmd, t_env *envp);
@@ -97,6 +98,7 @@ int								pipe_status_code(int status);
 int								builtin_echo(t_cmd *cmd);
 int								builtin_env(t_env *env);
 int								builtin_export(t_cmd *cmd, t_shell *shell);
+int								print_export(t_env *env);
 int								builtin_exit(t_cmd *cmd, t_shell *shell);
 int								builtin_pwd(void);
 int								builtin_cd(t_cmd *cmd, t_shell *shell);
@@ -125,6 +127,7 @@ void							ft_print_cmds(t_cmd *cmds);
 t_token							*print_err_syntax(void);
 char							*ft_gc_strjoin(const char *s1, const char *s2);
 char							*ft_gc_itoa(int n);
-char							*read_full_input(char *first);
+char							*ft_gc_substr(const char *s, int start,
+									int len);
 
 #endif

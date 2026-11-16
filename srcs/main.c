@@ -29,31 +29,11 @@ void	run_cmd(t_shell *shell)
 		shell->exit_code = exec_n_pipe(shell);
 }
 
-static void	print_heredoc_content(t_cmd *cmds)
-{
-	char	buf[1024];
-	int		n;
-
-	while (cmds)
-	{
-		if (cmds->heredoc_fd != -1)
-		{
-			ft_printf("  heredoc content:\n");
-			n = read(cmds->heredoc_fd, buf, 1023);
-			buf[n] = '\0';
-			ft_printf("%s\n", buf);
-			close(cmds->heredoc_fd);
-			cmds->heredoc_fd = -1;
-		}
-		cmds = cmds->next;
-	}
-}
-
-static void	process_input(t_shell *shell, char *full)
+static void	process_input(t_shell *shell, char *input)
 {
 	t_token	*tokens;
 
-	tokens = ft_lexer(full);
+	tokens = ft_lexer(input);
 	if (tokens && ft_syntax_check(tokens))
 	{
 		shell->cmds = ft_parser(tokens, shell->envp, shell->exit_code);
@@ -70,7 +50,6 @@ static void	process_input(t_shell *shell, char *full)
 static void	run_shell(t_shell *shell)
 {
 	char	*input;
-	char	*full;
 
 	set_prompt_signals();
 	while (1)
@@ -88,10 +67,8 @@ static void	run_shell(t_shell *shell)
 		}
 		if (*input)
 			add_history(input);
-		full = read_full_input(input);
-		if (full != input)
-			free(input);
-		process_input(shell, full);
+		process_input(shell, input);
+		free(input);
 	}
 }
 
