@@ -72,5 +72,5 @@ void	cmd_loop(int prev_read, int fd[2], t_cmd *current_cmd, t_shell *shell)
 		close(fd[1]);
 	}
 	exec_each_cmd(current_cmd, shell);
-	exit(1);
+	clean_exit(1);
 }

@@ -102,21 +102,23 @@ int	builtin_exit(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args[1])
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		exit(shell->exit_code);
+		clean_exit(shell->exit_code);
 	}
 	if (!is_numeric(cmd->args[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write_msh_exec_arg_error("exit", cmd->args[1],
 			"numeric argument required");
-		exit(2);
+		clean_exit(2);
 	}
 	if (cmd->args[2])
 	{
+		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write_msh_exec_error("exit", "too many arguments");
-		return (2);
+		return (1);
 	}
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	n = ft_atol(cmd->args[1]);
-	exit((unsigned char)n);
+	clean_exit((unsigned char)n);
+	return (0);
 }

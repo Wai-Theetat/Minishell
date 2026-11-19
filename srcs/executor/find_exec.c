@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: theetat <theetat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 16:47:46 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/06/26 21:52:03 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/11/19 09:05:32 by theetat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,16 @@ int	exec_not_found_code(char *cmd)
 
 char	*find_exec(char *cmd, t_env *envp)
 {
-	char	*path_env;
-	char	**paths;
+	char		*path_env;
+	char		**paths;
+	struct stat	st;
 
 	if (!cmd || !*cmd)
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
-		if (access(cmd, X_OK) == 0)
+		if (stat(cmd, &st) == 0 && !S_ISDIR(st.st_mode)
+			&& access(cmd, X_OK) == 0)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}

@@ -67,8 +67,10 @@ static void	run_shell(t_shell *shell)
 		}
 		if (*input)
 			add_history(input);
+		shell->input = input;
 		process_input(shell, input);
 		free(input);
+		shell->input = NULL;
 	}
 }
 
@@ -81,6 +83,11 @@ int	main(int argc, char **argv, char **envp)
 	shell.envp = ft_env_init(envp);
 	shell.exit_code = 0;
 	shell.cmds = NULL;
+	shell.input = NULL;
+	shell.saved_in = -1;
+	shell.saved_out = -1;
+	get_shell(&shell);
 	run_shell(&shell);
-	return (shell.exit_code);
+	clean_exit(shell.exit_code);
+	return (0);
 }

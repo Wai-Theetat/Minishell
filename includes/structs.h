@@ -29,6 +29,9 @@ typedef struct s_shell
 	t_cmd				*cmds;
 	t_env				*envp;
 	int					exit_code;
+	char				*input;
+	int					saved_in;
+	int					saved_out;
 }						t_shell;
 
 typedef enum e_token_type

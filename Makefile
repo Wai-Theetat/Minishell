@@ -41,6 +41,7 @@ SRCS			=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/utilities/printer.c \
 				$(SRC_DIR)/utilities/write_err_message.c \
 				$(SRC_DIR)/utilities/extra_helper.c \
+				$(SRC_DIR)/utilities/cleanup.c \
 				$(SRC_DIR)/executor/find_exec.c \
 				$(SRC_DIR)/executor/exec_simple.c \
 				$(SRC_DIR)/executor/exec_second.c \

@@ -47,27 +47,33 @@ int	run_builtin(t_cmd *cmd, t_shell *shell)
 	return (1);
 }
 
-static void	restore_fds(int saved_in, int saved_out)
+static void	restore_fds(t_shell *shell)
 {
-	dup2(saved_in, STDIN_FILENO);
-	dup2(saved_out, STDOUT_FILENO);
-	close(saved_in);
-	close(saved_out);
+	if (shell->saved_in != -1)
+	{
+		dup2(shell->saved_in, STDIN_FILENO);
+		close(shell->saved_in);
+	}
+	if (shell->saved_out != -1)
+	{
+		dup2(shell->saved_out, STDOUT_FILENO);
+		close(shell->saved_out);
+	}
+	shell->saved_in = -1;
+	shell->saved_out = -1;
 }
 
 int	run_builtin_redir(t_cmd *cmd, t_shell *shell)
 {
-	int	saved_in;
-	int	saved_out;
 	int	ret;
 
-	saved_in = dup(STDIN_FILENO);
-	saved_out = dup(STDOUT_FILENO);
-	if (saved_in == -1 || saved_out == -1)
-		return (perror("dup"), 1);
+	shell->saved_in = dup(STDIN_FILENO);
+	shell->saved_out = dup(STDOUT_FILENO);
+	if (shell->saved_in == -1 || shell->saved_out == -1)
+		return (restore_fds(shell), perror("dup"), 1);
 	if (apply_redirects(cmd) == -1)
-		return (restore_fds(saved_in, saved_out), 1);
+		return (restore_fds(shell), 1);
 	ret = run_builtin(cmd, shell);
-	restore_fds(saved_in, saved_out);
+	restore_fds(shell);
 	return (ret);
 }

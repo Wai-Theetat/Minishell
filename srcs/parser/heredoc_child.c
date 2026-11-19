@@ -63,5 +63,5 @@ void	heredoc_child(int *pipefd, t_hdoc *h)
 	close(pipefd[0]);
 	write_lines(pipefd[1], h);
 	close(pipefd[1]);
-	exit(g_signal == SIGINT);
+	clean_exit(g_signal == SIGINT);
 }

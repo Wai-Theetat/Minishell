@@ -42,18 +42,23 @@ static int	wait_for_child(pid_t pid, t_shell *shell)
 
 static void	run_child(char *path, t_cmd *cmd, char **envp)
 {
+	int	err;
+
 	set_child_signals();
 	if (apply_redirects(cmd) == -1)
 	{
 		free(path);
-		exit(1);
+		ft_free_strs(envp);
+		clean_exit(1);
 	}
 	execve(path, cmd->args, envp);
+	err = errno;
 	perror(cmd->args[0]);
-	if (errno == ENOENT)
-		return (free(path), exit(127));
 	free(path);
-	exit(126);
+	ft_free_strs(envp);
+	if (err == ENOENT)
+		clean_exit(127);
+	clean_exit(126);
 }
 
 int	exec_external_cmd(t_cmd *cmd, t_env *envp, t_shell *shell)

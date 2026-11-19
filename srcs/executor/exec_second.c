@@ -16,22 +16,27 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 	char	**env;
+	int		err;
 
 	set_child_signals();
 	if (apply_redirects(cmd) == -1)
-		exit(1);
+		clean_exit(1);
 	if (!cmd->args || !cmd->args[0])
-		exit(0);
+		clean_exit(0);
 	if (is_builtin(cmd->args[0]))
-		exit(run_builtin(cmd, shell));
+		clean_exit(run_builtin(cmd, shell));
 	path = find_exec(cmd->args[0], shell->envp);
 	if (!path)
-		exit(exec_not_found_code(cmd->args[0]));
+		clean_exit(exec_not_found_code(cmd->args[0]));
 	env = ft_env_to_char(shell->envp);
 	execve(path, cmd->args, env);
-	if (errno == ENOENT)
-		exit((perror(cmd->args[0]), 127));
-	exit((perror(cmd->args[0]), 126));
+	err = errno;
+	perror(cmd->args[0]);
+	free(path);
+	ft_free_strs(env);
+	if (err == ENOENT)
+		clean_exit(127);
+	clean_exit(126);
 }
 
 int	pipe_status_code(int status)

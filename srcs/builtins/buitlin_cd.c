@@ -63,7 +63,7 @@ int	builtin_cd(t_cmd *cmd, t_shell *shell)
 	if (cmd->args[1] && cmd->args[2])
 	{
 		write_msh_exec_error("cd", "too many arguments");
-		return (2);
+		return (1);
 	}
 	path = ft_cd_path(cmd, shell);
 	if (!path)

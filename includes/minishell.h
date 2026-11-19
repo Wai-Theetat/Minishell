@@ -129,5 +129,9 @@ char							*ft_gc_strjoin(const char *s1, const char *s2);
 char							*ft_gc_itoa(int n);
 char							*ft_gc_substr(const char *s, int start,
 									int len);
+t_shell							*get_shell(t_shell *set);
+void							ft_env_free(t_env *env);
+void							ft_free_strs(char **strs);
+void							clean_exit(int code);
 
 #endif
