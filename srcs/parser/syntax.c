@@ -20,14 +20,30 @@ static int	is_redir(t_token_type type)
 		|| type == TOKEN_HEREDOC);
 }
 
-static int	check_pipe(t_token *tok)
+/* Operator tokens carry no value, so rebuild their text for messages. */
+static char	*token_text(t_token *tok)
 {
+	if (!tok || tok->type == TOKEN_EOF)
+		return ("newline");
 	if (tok->type == TOKEN_PIPE)
-	{
-		ft_putstr_fd("minishell: syntax error near token `|'\n", 2);
-		return (0);
-	}
-	return (1);
+		return ("|");
+	if (tok->type == TOKEN_REDIRECT_IN)
+		return ("<");
+	if (tok->type == TOKEN_REDIRECT_OUT)
+		return (">");
+	if (tok->type == TOKEN_REDIRECT_APPEND)
+		return (">>");
+	if (tok->type == TOKEN_HEREDOC)
+		return ("<<");
+	return (tok->value);
+}
+
+static int	syntax_error(t_token *tok)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd(token_text(tok), 2);
+	ft_putstr_fd("'\n", 2);
+	return (0);
 }
 
 static int	check_token(t_token *tok)
@@ -36,18 +52,12 @@ static int	check_token(t_token *tok)
 	{
 		if (!tok->next || tok->next->type == TOKEN_EOF
 			|| tok->next->type == TOKEN_PIPE)
-		{
-			ft_putstr_fd("minishell: syntax error near token `|'\n", 2);
-			return (0);
-		}
+			return (syntax_error(tok));
 	}
 	if (is_redir(tok->type))
 	{
 		if (!tok->next || tok->next->type != TOKEN_WORD)
-		{
-			ft_putstr_fd("minishell: syntax error near token `newline'\n", 2);
-			return (0);
-		}
+			return (syntax_error(tok->next));
 	}
 	return (1);
 }
@@ -56,8 +66,8 @@ int	ft_syntax_check(t_token *tok)
 {
 	if (!tok || tok->type == TOKEN_EOF)
 		return (1);
-	if (!check_pipe(tok))
-		return (0);
+	if (tok->type == TOKEN_PIPE)
+		return (syntax_error(tok));
 	while (tok && tok->type != TOKEN_EOF)
 	{
 		if (!check_token(tok))
