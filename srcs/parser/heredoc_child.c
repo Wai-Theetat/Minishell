@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_child.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 16:10:00 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/07/18 16:10:00 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/11/19 12:22:31 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

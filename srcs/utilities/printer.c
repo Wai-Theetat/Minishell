@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
+/*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 13:17:18 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/06/04 15:47:14 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/11/19 12:23:17 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
