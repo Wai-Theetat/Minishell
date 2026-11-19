@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/11/19 12:40:55 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/11/19 12:46:09 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_cmd	*ft_parser(t_token *tok, t_env *env, int exit_code)
 	{
 		cmd = parse_cmd(&tok, env, exit_code);
 		if (!cmd)
-			return (edir_close_heredocs(cmd), NULL);
+			return (redir_close_heredocs(cmd), NULL);
 		if (!head)
 			head = cmd;
 		else
