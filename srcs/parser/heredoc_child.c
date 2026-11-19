@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 16:10:00 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/11/19 12:22:31 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/11/19 12:42:14 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	heredoc_sigint(int sig)
 {
 	g_signal = sig;
 	ft_putchar_fd('\n', 1);
-	exit(1);
+	clean_exit(1);
 }
 
 static void	write_one_line(int fd, char *line, t_hdoc *h)

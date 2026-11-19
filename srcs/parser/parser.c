@@ -6,7 +6,7 @@
 /*   By: tdharmar <tdharmar@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 14:00:00 by tdharmar          #+#    #+#             */
-/*   Updated: 2026/11/19 12:22:39 by tdharmar         ###   ########.fr       */
+/*   Updated: 2026/11/19 12:40:55 by tdharmar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static t_cmd	*parse_cmd(t_token **tok, t_env *env, int exit_code)
 			parse_redir(tok, cmd);
 	}
 	if (redir_run_heredocs(cmd, env, exit_code) == -1)
-		return (NULL);
+		return (redir_close_heredocs(cmd), NULL);
 	return (cmd);
 }
 
@@ -94,7 +94,7 @@ t_cmd	*ft_parser(t_token *tok, t_env *env, int exit_code)
 	{
 		cmd = parse_cmd(&tok, env, exit_code);
 		if (!cmd)
-			return (NULL);
+			return (edir_close_heredocs(cmd), NULL);
 		if (!head)
 			head = cmd;
 		else
