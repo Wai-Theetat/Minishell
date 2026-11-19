@@ -19,7 +19,8 @@ static size_t	env_count(t_env *env)
 	count = 0;
 	while (env)
 	{
-		count++;
+		if (env->value)
+			count++;
 		env = env->next;
 	}
 	return (count);
@@ -39,9 +40,12 @@ char	**ft_env_to_char(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		key_eq = ft_strjoin(tmp->key, "=");
-		arr[i++] = ft_strjoin(key_eq, tmp->value);
-		free(key_eq);
+		if (tmp->value)
+		{
+			key_eq = ft_strjoin(tmp->key, "=");
+			arr[i++] = ft_strjoin(key_eq, tmp->value);
+			free(key_eq);
+		}
 		tmp = tmp->next;
 	}
 	arr[i] = NULL;

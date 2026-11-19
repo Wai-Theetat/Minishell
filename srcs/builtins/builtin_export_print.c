@@ -6,7 +6,7 @@
 /*   By: koonchevychpai123 <koonchevychpai123@st    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/16 12:00:00 by koonchevych       #+#    #+#             */
-/*   Updated: 2026/11/16 12:00:00 by koonchevych      ###   ########.fr       */
+/*   Updated: 2026/11/19 12:37:30 by koonchevych      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,14 @@ static t_env	*next_in_order(t_env *env, t_env *prev)
 	best = NULL;
 	while (env)
 	{
-		if ((!prev || key_cmp(env->key, prev->key) > 0)
-			&& (!best || key_cmp(env->key, best->key) < 0))
+		if ((!prev || key_cmp(env->key, prev->key) > 0) && (!best
+				|| key_cmp(env->key, best->key) < 0))
 			best = env;
 		env = env->next;
 	}
 	return (best);
 }
 
-/* `export` with no arguments: list every variable sorted by name. */
 int	print_export(t_env *env)
 {
 	t_env	*cur;
@@ -41,7 +40,10 @@ int	print_export(t_env *env)
 	cur = next_in_order(env, NULL);
 	while (cur)
 	{
-		ft_printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
+		if (cur->value)
+			ft_printf("declare -x %s=\"%s\"\n", cur->key, cur->value);
+		else
+			ft_printf("declare -x %s\n", cur->key);
 		cur = next_in_order(env, cur);
 	}
 	return (0);
