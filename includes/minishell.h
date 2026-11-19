@@ -133,5 +133,6 @@ t_shell							*get_shell(t_shell *set);
 void							ft_env_free(t_env *env);
 void							ft_free_strs(char **strs);
 void							clean_exit(int code);
+void							run_builtin_child(t_cmd *cmd, t_shell *shell);
 
 #endif

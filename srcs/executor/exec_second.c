@@ -24,7 +24,7 @@ void	exec_each_cmd(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args || !cmd->args[0])
 		clean_exit(0);
 	if (is_builtin(cmd->args[0]))
-		clean_exit(run_builtin(cmd, shell));
+		run_builtin_child(cmd, shell);
 	path = find_exec(cmd->args[0], shell->envp);
 	if (!path)
 		clean_exit(exec_not_found_code(cmd->args[0]));

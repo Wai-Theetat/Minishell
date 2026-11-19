@@ -47,6 +47,17 @@ void	ft_free_strs(char **strs)
 	free(strs);
 }
 
+/*
+** A builtin in a pipeline child must not be killed by SIGPIPE when the
+** reader has already exited, or it dies before freeing anything.
+** Only builtins: SIG_IGN would survive execve for external commands.
+*/
+void	run_builtin_child(t_cmd *cmd, t_shell *shell)
+{
+	set_signal(SIGPIPE, SIG_IGN);
+	clean_exit(run_builtin(cmd, shell));
+}
+
 void	clean_exit(int code)
 {
 	t_shell	*shell;
