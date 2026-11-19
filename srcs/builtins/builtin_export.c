@@ -40,6 +40,17 @@ static int	is_valid_identifier(char *arg)
 	return (1);
 }
 
+static int	env_has_key(t_env *env, char *key)
+{
+	while (env)
+	{
+		if (ft_strncmp(env->key, key, ft_strlen(key) + 1) == 0)
+			return (1);
+		env = env->next;
+	}
+	return (0);
+}
+
 static void	export_one(t_shell *shell, char *arg)
 {
 	char	*eq;
@@ -47,8 +58,8 @@ static void	export_one(t_shell *shell, char *arg)
 	eq = ft_strchr(arg, '=');
 	if (eq)
 		set_export_value(shell, arg, eq);
-	else
-		ft_env_set(&shell->envp, arg, "");
+	else if (!env_has_key(shell->envp, arg))
+		ft_env_add_back(&shell->envp, ft_env_new(arg, NULL));
 }
 
 int	builtin_export(t_cmd *cmd, t_shell *shell)

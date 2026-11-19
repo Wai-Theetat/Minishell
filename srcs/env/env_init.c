@@ -16,14 +16,16 @@ t_env	*ft_env_new(char *key, char *value)
 {
 	t_env	*env_node;
 
-	if (!key || !value)
+	if (!key)
 		return (NULL);
 	env_node = malloc(sizeof(t_env));
 	if (!env_node)
 		return (NULL);
 	env_node->key = ft_strdup(key);
-	env_node->value = ft_strdup(value);
-	if (!env_node->key || !env_node->value)
+	env_node->value = NULL;
+	if (value)
+		env_node->value = ft_strdup(value);
+	if (!env_node->key || (value && !env_node->value))
 	{
 		free(env_node->key);
 		free(env_node->value);
